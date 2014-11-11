@@ -1,7 +1,7 @@
 import sys
 import curses
 
-from cobra.screen.menu import Menu
+from cobra.screen import MenuScreen
 
 
 class Game(object):
@@ -46,6 +46,7 @@ class Game(object):
         self._screen.update()
 
     def _setup(self, stdscr, args):
+        curses.resizeterm(24, 80)
         curses.start_color()
         curses.use_default_colors()
         curses.curs_set(False)
@@ -54,10 +55,11 @@ class Game(object):
         self.stdscr = stdscr
         self._window_size = stdscr.getmaxyx()
 
-        self.screen = Menu(self)
+        self.screen = MenuScreen(self)
 
     def _run(self, stdscr, args):
         self._setup(stdscr, args)
+
         self.create()
         while self._running:
             self.update()
