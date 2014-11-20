@@ -1,24 +1,6 @@
 import curses
 
 
-class GamePadCommand(object):
-
-    def up(self):
-        pass
-
-    def right(self):
-        pass
-
-    def down(self):
-        pass
-
-    def left(self):
-        pass
-
-    def action(self):
-        pass
-
-
 class GamePad(object):
 
     UP = 1
@@ -40,20 +22,30 @@ class GamePad(object):
             self.ACTION: (ord('p'), ord('m'))
         }
 
-        self.command = None
+        self.commands = {}
+
+    def bind_command(self, button, command):
+        self.commands[button] = command
 
     def input(self):
+        command = self._null_command
+
         key = self._input_key()
         if key in self.buttons[self.UP]:
-            self.command.up()
+            command = self.commands[self.UP]
         elif key in self.buttons[self.DOWN]:
-            self.command.down()
+            command = self.commands[self.DOWN]
         if key in self.buttons[self.LEFT]:
-            self.command.left()
+            command = self.commands[self.LEFT]
         elif key in self.buttons[self.RIGHT]:
-            self.command.right()
+            command = self.commands[self.RIGHT]
         if key in self.buttons[self.ACTION]:
-            self.command.action()
+            command = self.commands[self.ACTION]
+
+        command()
+
+    def _null_command(self):
+        pass
 
     def _input_key(self):
         key = self.stdscr.getch()
