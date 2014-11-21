@@ -1,8 +1,8 @@
 import sys
 import curses
 
-from cobra.model import Snake
-from cobra.renderer import SnakeRenderer
+from cobra.model import Cobra, Snake
+from cobra.renderer import CursesRenderer
 from cobra.gamepad import GamePad
 
 
@@ -30,27 +30,34 @@ class GameScreen(Screen):
     def __init__(self, game):
         super(GameScreen, self).__init__(game)
 
-        self.snake = None
-        self.score_text = None
-
+        self.cobra = None
+        self.renderer = None
         self.gamepad = None
 
     def create(self):
-        self.create_snake()
+        self.renderer = CursesRenderer(self.stdscr)
+        self.create_cobra()
         self.create_gamepad()
+
+    def create_cobra(self):
+        self.cobra = Cobra()
+        self.cobra.snake = self.create_snake()
+        self.cobra.listener = self.renderer
+        self.cobra.create()
 
     def create_snake(self):
         size = 5
         x, y = self.window_size[1] / 2 - size, self.window_size[0] / 2
-        self.snake = Snake([(x+i, y) for i in xrange(size)])
-        self.snake_renderer = SnakeRenderer(self.stdscr)
-        self.snake.listener = self.snake_renderer
+        snake = Snake([(x+i, y) for i in xrange(size)])
+        snake.listener = self.renderer
+        return snake
 
     def create_gamepad(self):
-        def snake_up(): self.snake.direction = Snake.UP
-        def snake_right(): self.snake.direction = Snake.RIGHT
-        def snake_down(): self.snake.direction = Snake.DOWN
-        def snake_left(): self.snake.direction = Snake.LEFT
+        snake = self.cobra.snake
+        def snake_up(): snake.direction = Snake.UP
+        def snake_right(): snake.direction = Snake.RIGHT
+        def snake_down(): snake.direction = Snake.DOWN
+        def snake_left(): snake.direction = Snake.LEFT
         def pause(): self.stdscr.addstr(0, 0, "PAUSE")
 
         self.gamepad = GamePad(self.stdscr)
@@ -61,11 +68,10 @@ class GameScreen(Screen):
         self.gamepad.bind_command(GamePad.ACTION, pause)
 
     def update(self):
-        curses.napms(200)
+        curses.napms(self.cobra.game_speed / self.cobra.game_dificulty)
 
         self.gamepad.input()
-
-        self.snake.update()
-        self.snake_renderer.draw()
+        self.cobra.update()
+        self.renderer.draw()
 
         self.stdscr.refresh()

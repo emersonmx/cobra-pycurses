@@ -48,7 +48,7 @@ class Game(object):
         curses.use_default_colors()
         curses.curs_set(False)
         stdscr.nodelay(True)
-        stdscr.border()
+        #stdscr.border()
 
         self.stdscr = stdscr
         self.window_size = stdscr.getmaxyx()

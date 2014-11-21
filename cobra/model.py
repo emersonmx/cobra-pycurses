@@ -1,3 +1,4 @@
+from random import randint
 from collections import deque
 
 
@@ -26,8 +27,9 @@ class Snake(object):
 
         self.body = deque(body)
         self._direction = self.RIGHT
+        self.dead = False
 
-        self._listener = None
+        self._listener = SnakeListener()
 
     @property
     def direction(self):
@@ -50,12 +52,17 @@ class Snake(object):
         self._listener = value
         self._listener.body_updated(self.body)
 
-    def update(self):
-        head = self._move(self.body[-1])
-        self.body.append(head)
+    def eat_food(self):
+        self.body.appendleft(self.body[0])
 
-        self.listener.head_updated(head)
-        self.listener.tail_updated(self.body.popleft())
+    def update(self):
+        if not self.dead:
+            head = self._move(self.body[-1])
+            tail = self.body.popleft()
+            self.body.append(head)
+
+            self.listener.head_updated(head)
+            self.listener.tail_updated(tail)
 
     def _move(self, right):
         head = [right[0], right[1]]
@@ -69,3 +76,139 @@ class Snake(object):
             head[0] += 1
 
         return head
+
+
+class Food(object):
+
+    def __init__(self, position, score_value=100):
+        super(Food, self).__init__()
+
+        self.position = position
+        self.score_value = score_value
+
+
+class StageListener(object):
+
+    def game_started(self, stage):
+        pass
+
+    def game_finished(self, stage):
+        pass
+
+    def food_created(self, stage):
+        pass
+
+    def score_updated(self, stage):
+        pass
+
+
+class Cobra(object):
+
+    EASY = 1
+    NORMAL = 2
+    HARD = 3
+
+    def __init__(self):
+        super(Cobra, self).__init__()
+
+        self.game_dificulty = self.NORMAL
+        self.game_speed = 200
+
+        self.bounds = (1, 2, 78, 22)
+        self.score = 0
+
+        self.snake = None
+        self.food = None
+
+        self.listener = StageListener()
+
+    def create(self):
+        self.food = self.create_food()
+
+        self.listener.game_started(self)
+        self.listener.food_created(self)
+        self.listener.score_updated(self)
+
+    def create_food(self):
+        attemps = 3
+        for _ in xrange(attemps):
+            x = randint(self.bounds[0], self.bounds[2])
+            y = randint(self.bounds[1], self.bounds[3])
+            point = [x, y]
+            if point not in self.snake.body:
+                return Food(point)
+
+        return Food(self._find_closest_tail_position())
+
+    def _find_closest_tail_position(self):
+        tail = self.snake.body[0]
+        left = (tail[0] - 1, tail[1])
+        right = (tail[0] + 1, tail[1])
+        up = (tail[0], tail[1] - 1)
+        down = (tail[0], tail[1] + 1)
+
+        if self._food_position_is_valid(left):
+            return left
+        if self._food_position_is_valid(right):
+            return right
+        if self._food_position_is_valid(up):
+            return up
+        if self._food_position_is_valid(down):
+            return down
+
+    def _food_position_is_valid(self, position):
+        return position not in self.snake.body and self._inside_bounds(position)
+
+    def _inside_bounds(self, point):
+        if self.bounds[0] < point[0] < self.bounds[2]:
+            return True
+        if self.bounds[1] < point[1] < self.bounds[3]:
+            return True
+
+        return False
+
+    def update(self):
+        self.snake.update()
+
+        if self._snake_collide_wall():
+            self.snake.dead = True
+            self.listener.game_finished(self)
+        if self._snake_collide_herself():
+            self.snake.dead = True
+            self.listener.game_finished(self)
+        if self._snake_collide_food():
+            self.snake.eat_food()
+
+            self.score += self.food.score_value * self.game_dificulty
+            self.food = self.create_food()
+
+            self.listener.food_created(self)
+            self.listener.score_updated(self)
+
+    def _snake_collide_wall(self):
+        head = self.snake.body[-1]
+        if head[0] < self.bounds[0]:
+            return True
+        if head[0] > self.bounds[2]:
+            return True
+        if head[1] < self.bounds[1]:
+            return True
+        if head[1] > self.bounds[3]:
+            return True
+
+        return False
+
+    def _snake_collide_herself(self):
+        head = self.snake.body[-1]
+        if self.snake.body.count(head) > 1:
+            return True
+
+        return False
+
+    def _snake_collide_food(self):
+        head = self.snake.body[-1]
+        if ((head[0] == self.food.position[0]) and
+                (head[1] == self.food.position[1])):
+            return True
+
+        return False
