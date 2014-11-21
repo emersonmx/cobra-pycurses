@@ -131,14 +131,16 @@ class Cobra(object):
 
     def create_food(self):
         attemps = 3
+        food_score = 100
         for _ in xrange(attemps):
             x = randint(self.bounds[0], self.bounds[2])
             y = randint(self.bounds[1], self.bounds[3])
             point = [x, y]
             if point not in self.snake.body:
-                return Food(point)
+                return Food(point, food_score * self.game_dificulty)
 
-        return Food(self._find_closest_tail_position())
+        return Food(self._find_closest_tail_position(),
+                    food_score * self.game_dificulty)
 
     def _find_closest_tail_position(self):
         tail = self.snake.body[0]
@@ -179,7 +181,7 @@ class Cobra(object):
         if self._snake_collide_food():
             self.snake.eat_food()
 
-            self.score += self.food.score_value * self.game_dificulty
+            self.score += self.food.score_value
             self.food = self.create_food()
 
             self.listener.food_created(self)
