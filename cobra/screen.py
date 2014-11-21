@@ -1,6 +1,7 @@
 import sys
 import curses
 import logging
+logger = logging.getLogger(__name__)
 
 from cobra.model import Cobra, Snake
 from cobra.view import CursesView
@@ -59,7 +60,7 @@ class GameScreen(Screen):
         def snake_right(): snake.direction = Snake.RIGHT
         def snake_down(): snake.direction = Snake.DOWN
         def snake_left(): snake.direction = Snake.LEFT
-        def pause(): logging.info("PAUSE")
+        def pause(): logger.info("PAUSE")
 
         self.gamepad = GamePad(self.stdscr)
         self.gamepad.bind_command(GamePad.UP, snake_up)
