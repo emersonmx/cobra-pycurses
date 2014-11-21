@@ -1,3 +1,4 @@
+import logging
 from cobra.model import SnakeListener, StageListener
 
 
@@ -76,7 +77,7 @@ class CursesView(View, SnakeListener, StageListener):
     def game_finished(self, stage):
         self.update_bounds = True
         self.score = stage.score
-        self.stdscr.addstr(2, 1, "DEAD")
+        logging.info("DEAD")
 
     def food_created(self, stage):
         self.food = stage.food
