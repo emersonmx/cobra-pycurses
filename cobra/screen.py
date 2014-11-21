@@ -35,21 +35,6 @@ class GameScreen(Screen):
 
         self.gamepad = None
 
-    def snake_up(self):
-        self.snake.direction = Snake.UP
-
-    def snake_right(self):
-        self.snake.direction = Snake.RIGHT
-
-    def snake_down(self):
-        self.snake.direction = Snake.DOWN
-
-    def snake_left(self):
-        self.snake.direction = Snake.LEFT
-
-    def pause(self):
-        self.stdscr.addstr(0, 0, "PAUSE")
-
     def create(self):
         self.create_snake()
         self.create_gamepad()
@@ -62,12 +47,18 @@ class GameScreen(Screen):
         self.snake.listener = self.snake_renderer
 
     def create_gamepad(self):
+        def snake_up(): self.snake.direction = Snake.UP
+        def snake_right(): self.snake.direction = Snake.RIGHT
+        def snake_down(): self.snake.direction = Snake.DOWN
+        def snake_left(): self.snake.direction = Snake.LEFT
+        def pause(): self.stdscr.addstr(0, 0, "PAUSE")
+
         self.gamepad = GamePad(self.stdscr)
-        self.gamepad.bind_command(GamePad.UP, self.snake_up)
-        self.gamepad.bind_command(GamePad.RIGHT, self.snake_right)
-        self.gamepad.bind_command(GamePad.DOWN, self.snake_down)
-        self.gamepad.bind_command(GamePad.LEFT, self.snake_left)
-        self.gamepad.bind_command(GamePad.ACTION, self.pause)
+        self.gamepad.bind_command(GamePad.UP, snake_up)
+        self.gamepad.bind_command(GamePad.RIGHT, snake_right)
+        self.gamepad.bind_command(GamePad.DOWN, snake_down)
+        self.gamepad.bind_command(GamePad.LEFT, snake_left)
+        self.gamepad.bind_command(GamePad.ACTION, pause)
 
     def update(self):
         curses.napms(200)
