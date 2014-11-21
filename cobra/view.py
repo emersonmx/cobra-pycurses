@@ -1,16 +1,16 @@
 from cobra.model import SnakeListener, StageListener
 
 
-class Renderer(object):
+class View(object):
 
     def draw(self):
         pass
 
 
-class CursesRenderer(Renderer, SnakeListener, StageListener):
+class CursesView(View, SnakeListener, StageListener):
 
     def __init__(self, stdscr):
-        super(CursesRenderer, self).__init__()
+        super(CursesView, self).__init__()
 
         self.stdscr = stdscr
 

@@ -2,7 +2,7 @@ import sys
 import curses
 
 from cobra.model import Cobra, Snake
-from cobra.renderer import CursesRenderer
+from cobra.view import CursesView
 from cobra.gamepad import GamePad
 
 
@@ -31,25 +31,25 @@ class GameScreen(Screen):
         super(GameScreen, self).__init__(game)
 
         self.cobra = None
-        self.renderer = None
+        self.view = None
         self.gamepad = None
 
     def create(self):
-        self.renderer = CursesRenderer(self.stdscr)
+        self.view = CursesView(self.stdscr)
         self.create_cobra()
         self.create_gamepad()
 
     def create_cobra(self):
         self.cobra = Cobra()
         self.cobra.snake = self.create_snake()
-        self.cobra.listener = self.renderer
+        self.cobra.listener = self.view
         self.cobra.create()
 
     def create_snake(self):
         size = 5
         x, y = self.window_size[1] / 2 - size, self.window_size[0] / 2
         snake = Snake([(x+i, y) for i in xrange(size)])
-        snake.listener = self.renderer
+        snake.listener = self.view
         return snake
 
     def create_gamepad(self):
@@ -72,6 +72,6 @@ class GameScreen(Screen):
 
         self.gamepad.input()
         self.cobra.update()
-        self.renderer.draw()
+        self.view.draw()
 
         self.stdscr.refresh()
