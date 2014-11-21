@@ -67,7 +67,8 @@ class GameScreen(Screen):
         self.gamepad.bind_command(GamePad.RIGHT, snake_right)
         self.gamepad.bind_command(GamePad.DOWN, snake_down)
         self.gamepad.bind_command(GamePad.LEFT, snake_left)
-        self.gamepad.bind_command(GamePad.ACTION, pause)
+        self.gamepad.bind_command(GamePad.ENTER, pause)
+        self.gamepad.bind_command(GamePad.BACK, pause)
 
     def update(self):
         curses.napms(self.cobra.game_speed / self.cobra.game_dificulty)

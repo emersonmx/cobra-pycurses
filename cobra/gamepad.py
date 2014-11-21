@@ -1,4 +1,5 @@
 import curses
+import curses.ascii
 
 
 class GamePad(object):
@@ -7,8 +8,9 @@ class GamePad(object):
     RIGHT = 2
     DOWN = 4
     LEFT = 8
-    ACTION = 16
-    ALL_BUTTONS = 31
+    ENTER = 16
+    BACK = 32
+    ALL_BUTTONS = 63
 
     def __init__(self, stdscr):
         super(GamePad, self).__init__()
@@ -19,7 +21,8 @@ class GamePad(object):
             self.RIGHT: (curses.KEY_RIGHT, ord('l')),
             self.DOWN: (curses.KEY_DOWN, ord('j')),
             self.LEFT: (curses.KEY_LEFT, ord('h')),
-            self.ACTION: (ord('p'), ord('m'))
+            self.ENTER: (ord('\n'), ord(' ')),
+            self.BACK: (curses.ascii.ESC, ord('p'))
         }
 
         self.commands = {}
@@ -39,8 +42,10 @@ class GamePad(object):
             command = self.commands[self.LEFT]
         elif key in self.buttons[self.RIGHT]:
             command = self.commands[self.RIGHT]
-        if key in self.buttons[self.ACTION]:
-            command = self.commands[self.ACTION]
+        if key in self.buttons[self.ENTER]:
+            command = self.commands[self.ENTER]
+        if key in self.buttons[self.BACK]:
+            command = self.commands[self.BACK]
 
         command()
 
