@@ -106,7 +106,8 @@ class Cobra(object):
 
     EASY = 1
     NORMAL = 2
-    HARD = 3
+    HARD = 4
+    VERY_HARD = 5
 
     def __init__(self):
         super(Cobra, self).__init__()
@@ -168,6 +169,9 @@ class Cobra(object):
             return True
 
         return False
+
+    def update_delay(self):
+        return self.game_speed / self.game_dificulty
 
     def update(self):
         self.snake.update()

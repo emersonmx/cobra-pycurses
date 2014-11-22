@@ -71,7 +71,7 @@ class GameScreen(Screen):
         self.gamepad.bind_command(GamePad.BACK, pause)
 
     def update(self):
-        curses.napms(self.cobra.game_speed / self.cobra.game_dificulty)
+        curses.napms(self.cobra.update_delay())
 
         self.gamepad.input()
         self.cobra.update()
