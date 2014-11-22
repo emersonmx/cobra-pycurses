@@ -17,12 +17,12 @@ class GamePad(object):
 
         self.stdscr = stdscr
         self.buttons = {
-            self.UP: (curses.KEY_UP, ord('k')),
-            self.RIGHT: (curses.KEY_RIGHT, ord('l')),
-            self.DOWN: (curses.KEY_DOWN, ord('j')),
-            self.LEFT: (curses.KEY_LEFT, ord('h')),
-            self.ENTER: (ord('\n'), ord(' ')),
-            self.BACK: (curses.ascii.ESC, ord('p'))
+            self.UP: set([curses.KEY_UP, ord('k')]),
+            self.RIGHT: set([curses.KEY_RIGHT, ord('l')]),
+            self.DOWN: set([curses.KEY_DOWN, ord('j')]),
+            self.LEFT: set([curses.KEY_LEFT, ord('h')]),
+            self.ENTER: set([ord('\n'), ord(' ')]),
+            self.BACK: set([curses.ascii.ESC, ord('p')])
         }
 
         self.commands = {}
