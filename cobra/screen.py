@@ -60,14 +60,13 @@ class GameScreen(Screen):
         def snake_right(): snake.direction = Snake.RIGHT
         def snake_down(): snake.direction = Snake.DOWN
         def snake_left(): snake.direction = Snake.LEFT
-        def pause(): logger.info("PAUSE")
+        def pause(): logger.info("Pause Menu")
 
         self.gamepad = GamePad(self.stdscr)
         self.gamepad.bind_command(GamePad.UP, snake_up)
         self.gamepad.bind_command(GamePad.RIGHT, snake_right)
         self.gamepad.bind_command(GamePad.DOWN, snake_down)
         self.gamepad.bind_command(GamePad.LEFT, snake_left)
-        self.gamepad.bind_command(GamePad.ENTER, pause)
         self.gamepad.bind_command(GamePad.BACK, pause)
 
     def update(self):
