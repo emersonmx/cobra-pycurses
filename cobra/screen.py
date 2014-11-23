@@ -14,8 +14,14 @@ class Screen(object):
         super(Screen, self).__init__()
 
         self.application = application
-        self.stdscr = application.stdscr
-        self.window_size = application.window_size
+
+    @property
+    def stdscr(self):
+        return self.application.stdscr
+
+    @property
+    def window_size(self):
+        return self.application.window_size
 
     def create(self):
         pass
@@ -37,6 +43,13 @@ class GameScreen(Screen):
         self.gamepad = None
 
     def create(self):
+        self._setup_curses()
+        self._setup_game()
+
+    def _setup_curses(self):
+        self.stdscr.nodelay(True)
+
+    def _setup_game(self):
         self.view = CursesView(self.stdscr)
         self._create_game()
         self._create_gamepad()
@@ -68,6 +81,9 @@ class GameScreen(Screen):
         self.gamepad.bind_command(GamePad.DOWN, snake_down)
         self.gamepad.bind_command(GamePad.LEFT, snake_left)
         self.gamepad.bind_command(GamePad.BACK, pause)
+
+    def dispose(self):
+        self.stdscr.nodelay(False)
 
     def update(self):
         curses.napms(self.game.update_delay())

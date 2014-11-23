@@ -2,6 +2,7 @@ import sys
 import curses
 
 from cobra.screen import GameScreen
+from cobra.screen import Screen as NoScreen
 
 
 class Cobra(object):
@@ -10,12 +11,12 @@ class Cobra(object):
         super(Cobra, self).__init__()
 
         self.stdscr = None
-        self.window_size = []
+        self.window_size = None
 
         self._running = True
         self._error_code = 0
 
-        self._screen = None
+        self._screen = NoScreen(self)
 
     @property
     def screen(self):
@@ -23,9 +24,7 @@ class Cobra(object):
 
     @screen.setter
     def screen(self, value):
-        if self._screen:
-            self._screen.dispose()
-
+        self._screen.dispose()
         self._screen = value
         self._screen.create()
 
@@ -61,7 +60,6 @@ class Cobra(object):
         curses.start_color()
         curses.use_default_colors()
         curses.curs_set(False)
-        stdscr.nodelay(True)
 
         self.stdscr = stdscr
         self.window_size = stdscr.getmaxyx()
