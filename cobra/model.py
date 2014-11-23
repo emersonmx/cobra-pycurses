@@ -63,8 +63,6 @@ class Snake(object):
     def update(self):
         if not self.dead:
             head = self._move()
-            if isinstance(head, list):
-                logger.error("Body has list position!")
             self.body.appendleft(head)
             self.listener.snake_updated(self)
             self.body.pop()

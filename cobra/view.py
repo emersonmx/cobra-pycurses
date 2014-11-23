@@ -47,9 +47,11 @@ class CursesView(View, SnakeListener, GameListener):
 
     def food_created(self, stage):
         self.food = stage.food
+        logger.info("Snake eat food")
 
     def score_updated(self, stage):
         self.score = stage.score
+        logger.info("Score updated to {}".format(self.score))
 
     def draw(self):
         self._draw_snake()
