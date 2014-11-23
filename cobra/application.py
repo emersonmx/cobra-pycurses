@@ -16,7 +16,7 @@ class Cobra(object):
         self._running = True
         self._error_code = 0
 
-        self._screen = NoScreen(self)
+        self._screen = NoScreen()
 
     @property
     def screen(self):

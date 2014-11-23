@@ -10,8 +10,20 @@ from cobra.gamepad import GamePad
 
 class Screen(object):
 
+    def create(self):
+        pass
+
+    def dispose(self):
+        pass
+
+    def update(self):
+        pass
+
+
+class BaseScreen(Screen):
+
     def __init__(self, application):
-        super(Screen, self).__init__()
+        super(BaseScreen, self).__init__()
 
         self.application = application
 
@@ -23,17 +35,8 @@ class Screen(object):
     def window_size(self):
         return self.application.window_size
 
-    def create(self):
-        pass
 
-    def dispose(self):
-        pass
-
-    def update(self):
-        pass
-
-
-class GameScreen(Screen):
+class GameScreen(BaseScreen):
 
     def __init__(self, application):
         super(GameScreen, self).__init__(application)
