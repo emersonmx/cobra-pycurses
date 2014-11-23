@@ -65,8 +65,9 @@ class GameScreen(BaseScreen):
 
     def _create_snake(self):
         size = 5
-        x, y = self.window_size[1] / 2 - size, self.window_size[0] / 2
-        snake = Snake([(x+i, y) for i in xrange(size)])
+        x, y = self.window_size[1] / 2, self.window_size[0] / 2
+        snake = Snake([(x-i, y) for i in xrange(size)])
+        logger.info(snake.body)
         snake.listener = self.view
         return snake
 
@@ -79,11 +80,11 @@ class GameScreen(BaseScreen):
         def pause(): logger.info("Pause Menu")
 
         self.gamepad = GamePad(self.stdscr)
-        self.gamepad.bind_command(GamePad.UP, snake_up)
-        self.gamepad.bind_command(GamePad.RIGHT, snake_right)
-        self.gamepad.bind_command(GamePad.DOWN, snake_down)
-        self.gamepad.bind_command(GamePad.LEFT, snake_left)
-        self.gamepad.bind_command(GamePad.BACK, pause)
+        self.gamepad.commands[GamePad.UP] = snake_up
+        self.gamepad.commands[GamePad.RIGHT] = snake_right
+        self.gamepad.commands[GamePad.DOWN] = snake_down
+        self.gamepad.commands[GamePad.LEFT] = snake_left
+        self.gamepad.commands[GamePad.BACK] = pause
 
     def dispose(self):
         self.stdscr.nodelay(False)

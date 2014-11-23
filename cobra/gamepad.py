@@ -1,6 +1,8 @@
 import curses
 import curses.ascii
 
+def no_command(): pass
+
 
 class GamePad(object):
 
@@ -25,13 +27,16 @@ class GamePad(object):
             self.BACK: set([curses.ascii.ESC, ord('p')])
         }
 
-        self.commands = {}
-
-    def bind_command(self, button, command):
-        self.commands[button] = command
+        self.commands = {
+            self.UP: no_command,
+            self.RIGHT: no_command,
+            self.DOWN: no_command,
+            self.LEFT: no_command,
+            self.ENTER: no_command,
+            self.BACK: no_command,
+        }
 
     def input(self):
-        def no_command(): pass
         command = no_command
 
         key = self._input_key()

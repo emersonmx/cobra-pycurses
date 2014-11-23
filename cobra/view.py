@@ -22,17 +22,34 @@ class CursesView(View, SnakeListener, GameListener):
         self.score = None
         self.food = None
 
-        self.body_list = []
+        self.first_update = True
+        self.body = []
         self.tail = []
 
-    def body_updated(self, body):
-        self.body_list = list(body)
+    def snake_updated(self, snake):
+        if self.first_update:
+            self.body = list(snake.body)
+            self.first_update = False
+        else:
+            self.body.append(snake.head)
+            self.tail.append(snake.tail)
 
-    def head_updated(self, head):
-        self.body_list.append(head)
+    def game_started(self, stage):
+        self.stage = stage
+        self.update_bounds = True
+        self.score = stage.score
+        self.food = stage.food
 
-    def tail_updated(self, tail):
-        self.tail.append(tail)
+    def game_finished(self, stage):
+        self.update_bounds = True
+        self.score = stage.score
+        logger.info("DEAD")
+
+    def food_created(self, stage):
+        self.food = stage.food
+
+    def score_updated(self, stage):
+        self.score = stage.score
 
     def draw(self):
         self._draw_snake()
@@ -41,13 +58,13 @@ class CursesView(View, SnakeListener, GameListener):
         self._draw_food()
 
     def _draw_snake(self):
-        for x, y in self.body_list:
+        for x, y in self.body:
             self.stdscr.addch(y, x, '#')
 
         for x, y in self.tail:
             self.stdscr.addch(y, x, ' ')
 
-        self.body_list = []
+        self.body = []
         self.tail = []
 
     def _draw_bounds(self):
@@ -70,19 +87,3 @@ class CursesView(View, SnakeListener, GameListener):
             self.stdscr.addch(y, x, '*')
             self.food = None
 
-    def game_started(self, stage):
-        self.stage = stage
-        self.update_bounds = True
-        self.score = stage.score
-        self.food = stage.food
-
-    def game_finished(self, stage):
-        self.update_bounds = True
-        self.score = stage.score
-        logger.info("DEAD")
-
-    def food_created(self, stage):
-        self.food = stage.food
-
-    def score_updated(self, stage):
-        self.score = stage.score

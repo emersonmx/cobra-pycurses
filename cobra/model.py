@@ -1,16 +1,13 @@
+import logging
+logger = logging.getLogger(__name__)
+
 from random import randint
 from collections import deque
 
 
 class SnakeListener(object):
 
-    def body_updated(self, body):
-        pass
-
-    def head_updated(self, head):
-        pass
-
-    def tail_updated(self, tail):
+    def snake_updated(self, snake):
         pass
 
 
@@ -32,6 +29,14 @@ class Snake(object):
         self._listener = SnakeListener()
 
     @property
+    def head(self):
+        return self.body[0]
+
+    @property
+    def tail(self):
+        return self.body[-1]
+
+    @property
     def direction(self):
         return self._direction
 
@@ -50,32 +55,32 @@ class Snake(object):
     @listener.setter
     def listener(self, listener):
         self._listener = listener
-        self._listener.body_updated(self.body)
+        self._listener.snake_updated(self)
 
     def eat_food(self):
-        self.body.appendleft(self.body[0])
+        self.body.append(self.tail)
 
     def update(self):
         if not self.dead:
-            head = self._move(self.body[-1])
-            tail = self.body.popleft()
-            self.body.append(head)
+            head = self._move()
+            if isinstance(head, list):
+                logger.error("Body has list position!")
+            self.body.appendleft(head)
+            self.listener.snake_updated(self)
+            self.body.pop()
 
-            self.listener.head_updated(head)
-            self.listener.tail_updated(tail)
-
-    def _move(self, head):
-        head = [head[0], head[1]]
+    def _move(self):
+        x, y = self.head
         if self.direction == self.UP:
-            head[1] -= 1
+            y -= 1
         elif self.direction == self.DOWN:
-            head[1] += 1
+            y += 1
         elif self.direction == self.LEFT:
-            head[0] -= 1
+            x -= 1
         elif self.direction == self.RIGHT:
-            head[0] += 1
+            x += 1
 
-        return head
+        return (x, y)
 
 
 class Food(object):
@@ -146,7 +151,7 @@ class Game(object):
 
     def _find_closest_tail_position(self):
         # TODO: Rename to a better name.
-        tail = self.snake.body[0]
+        tail = self.snake.tail
         left = (tail[0] - 1, tail[1])
         right = (tail[0] + 1, tail[1])
         up = (tail[0], tail[1] - 1)
@@ -195,7 +200,7 @@ class Game(object):
 
     def _snake_collide_wall(self):
         # TODO: Rename to a better name.
-        head = self.snake.body[-1]
+        head = self.snake.head
         if head[0] < self.bounds[0]:
             return True
         if head[0] > self.bounds[2]:
@@ -209,7 +214,7 @@ class Game(object):
 
     def _snake_collide_herself(self):
         # TODO: Rename to a better name.
-        head = self.snake.body[-1]
+        head = self.snake.head
         if self.snake.body.count(head) > 1:
             return True
 
@@ -217,7 +222,7 @@ class Game(object):
 
     def _snake_collide_food(self):
         # TODO: Rename to a better name.
-        head = self.snake.body[-1]
+        head = self.snake.head
         if ((head[0] == self.food.position[0]) and
                 (head[1] == self.food.position[1])):
             return True
