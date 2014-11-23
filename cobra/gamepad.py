@@ -57,5 +57,4 @@ class GamePad(object):
 
     def _input_key(self):
         key = self.stdscr.getch()
-        curses.flushinp()
         return key

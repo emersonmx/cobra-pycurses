@@ -1,4 +1,5 @@
 import sys
+import time
 import curses
 
 from cobra.screen import GameScreen
@@ -15,6 +16,7 @@ class Cobra(object):
 
         self._running = True
         self._error_code = 0
+        self._last_ticks = 0
 
         self._screen = NoScreen()
 
@@ -39,7 +41,14 @@ class Cobra(object):
         self.screen.dispose()
 
     def update(self):
-        self.screen.update()
+        self.screen.update(self._delta_time())
+
+    def _delta_time(self):
+        ticks = time.time()
+        delta = ticks - self._last_ticks
+        self._last_ticks = ticks
+
+        return delta
 
     def run(self):
         curses.wrapper(self._run, sys.argv)
@@ -61,3 +70,5 @@ class Cobra(object):
         self.stdscr = stdscr
         self.window_size = stdscr.getmaxyx()
         self.screen = GameScreen(self)
+
+        self._last_ticks = time.time()

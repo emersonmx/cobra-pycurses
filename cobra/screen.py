@@ -16,7 +16,7 @@ class Screen(object):
     def dispose(self):
         pass
 
-    def update(self):
+    def update(self, delta):
         pass
 
 
@@ -89,11 +89,10 @@ class GameScreen(BaseScreen):
     def dispose(self):
         self.stdscr.nodelay(False)
 
-    def update(self):
-        curses.napms(self.world.update_delay())
-
+    def update(self, delta):
+        curses.napms(10)
         self.gamepad.input()
-        self.world.update()
+        self.world.update(delta)
         self.view.draw()
 
         self.stdscr.refresh()

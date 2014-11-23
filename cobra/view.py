@@ -1,7 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from cobra.model import SnakeListener, GameListener
+from cobra.model import SnakeListener, WorldListener
 
 
 class View(object):
@@ -10,7 +10,7 @@ class View(object):
         pass
 
 
-class CursesView(View, SnakeListener, GameListener):
+class CursesView(View, SnakeListener, WorldListener):
 
     def __init__(self, stdscr):
         super(CursesView, self).__init__()
@@ -22,17 +22,16 @@ class CursesView(View, SnakeListener, GameListener):
         self.score = None
         self.food = None
 
-        self.first_update = True
-        self.body = []
-        self.tail = []
+        self.first = True
 
-    def snake_updated(self, snake):
-        if self.first_update:
-            self.body = list(snake.body)
-            self.first_update = False
-        else:
-            self.body.append(snake.head)
-            self.tail.append(snake.tail)
+        self.updated_parts = []
+        self.removed_parts = []
+
+    def snake_updated_parts(self, parts):
+        self.updated_parts = parts
+
+    def snake_removed_parts(self, parts):
+        self.removed_parts = parts
 
     def world_started(self, stage):
         self.stage = stage
@@ -47,7 +46,6 @@ class CursesView(View, SnakeListener, GameListener):
 
     def food_created(self, stage):
         self.food = stage.food
-        logger.info("Snake eat food")
 
     def score_updated(self, stage):
         self.score = stage.score
@@ -60,14 +58,14 @@ class CursesView(View, SnakeListener, GameListener):
         self._draw_food()
 
     def _draw_snake(self):
-        for x, y in self.body:
-            self.stdscr.addch(y, x, '#')
-
-        for x, y in self.tail:
+        for x, y in self.removed_parts:
             self.stdscr.addch(y, x, ' ')
 
-        self.body = []
-        self.tail = []
+        for x, y in self.updated_parts:
+            self.stdscr.addch(y, x, '#')
+
+        self.updated_parts = []
+        self.removed_parts = []
 
     def _draw_bounds(self):
         if self.update_bounds:

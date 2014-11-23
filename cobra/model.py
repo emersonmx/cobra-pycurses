@@ -7,7 +7,10 @@ from collections import deque
 
 class SnakeListener(object):
 
-    def snake_updated(self, snake):
+    def snake_updated_parts(self, parts):
+        pass
+
+    def snake_removed_parts(self, parts):
         pass
 
 
@@ -24,7 +27,7 @@ class Snake(object):
 
         self.body = deque(body)
         self._direction = self.RIGHT
-        self.dead = False
+        self._input_direction = self._direction
 
         self._listener = SnakeListener()
 
@@ -43,7 +46,7 @@ class Snake(object):
     @direction.setter
     def direction(self, direction):
         if self._can_turn(direction):
-            self._direction = direction
+            self._input_direction = direction
 
     def _can_turn(self, direction):
         return ((direction + self._direction) % 2) == 1
@@ -55,10 +58,32 @@ class Snake(object):
     @listener.setter
     def listener(self, listener):
         self._listener = listener
-        self._listener.snake_updated(self)
+        self._listener.snake_updated_parts(list(self.body))
 
     def eat(self):
         self.body.append(self.tail)
+
+    def update(self, delta):
+        self._direction = self._input_direction
+        head = self._move()
+        self.body.appendleft(head)
+        tail = self.body.pop()
+
+        self.listener.snake_updated_parts([head, self.tail])
+        self.listener.snake_removed_parts([tail])
+
+    def _move(self):
+        x, y = self.head
+        if self.direction == self.UP:
+            y -= 1
+        elif self.direction == self.DOWN:
+            y += 1
+        elif self.direction == self.LEFT:
+            x -= 1
+        elif self.direction == self.RIGHT:
+            x += 1
+
+        return (x, y)
 
     def check_hit_bounds(self, bounds):
         if self.head[0] < bounds[0]:
@@ -84,26 +109,6 @@ class Snake(object):
 
         return False
 
-    def update(self):
-        if not self.dead:
-            head = self._move()
-            self.body.appendleft(head)
-            self.listener.snake_updated(self)
-            self.body.pop()
-
-    def _move(self):
-        x, y = self.head
-        if self.direction == self.UP:
-            y -= 1
-        elif self.direction == self.DOWN:
-            y += 1
-        elif self.direction == self.LEFT:
-            x -= 1
-        elif self.direction == self.RIGHT:
-            x += 1
-
-        return (x, y)
-
 
 class Food(object):
 
@@ -114,7 +119,7 @@ class Food(object):
         self.score_value = score_value
 
 
-class GameListener(object):
+class WorldListener(object):
 
     def world_started(self, stage):
         pass
@@ -131,24 +136,21 @@ class GameListener(object):
 
 class World(object):
 
-    EASY = 1
-    NORMAL = 2
-    HARD = 4
-    VERY_HARD = 5
-
     def __init__(self):
         super(World, self).__init__()
 
-        self.dificulty = self.NORMAL
-        self.speed = 200
-
         self.bounds = (1, 2, 78, 22)
         self.score = 0
+        self.game_over = False
 
         self.snake = None
         self.food = None
 
-        self.listener = GameListener()
+        self.tick_time = 0
+        self.tick = 0.4
+        self.tick_decrement = 0
+
+        self.listener = WorldListener()
 
     def create(self):
         self.food = self._create_food()
@@ -156,6 +158,8 @@ class World(object):
         self.listener.world_started(self)
         self.listener.food_created(self)
         self.listener.score_updated(self)
+
+        self.tick_decrement = self.tick * 0.1
 
     def _create_food(self):
         # TODO: Move to Food class.
@@ -168,8 +172,7 @@ class World(object):
             if point not in self.snake.body:
                 return Food(point, food_score)
 
-        return Food(self._find_closest_tail_position(),
-                    food_score * self.dificulty)
+        return Food(self._find_closest_tail_position(), food_score)
 
     def _find_closest_tail_position(self):
         # TODO: Rename to a better name.
@@ -199,26 +202,38 @@ class World(object):
 
         return False
 
-    def update_delay(self):
-        return self.speed / self.dificulty
+    def update(self, delta):
+        if not self.game_over:
+            self.tick_time += delta
+            while self.tick_time > self.tick:
+                self.tick_time -= self.tick
+                self._update_world(delta)
 
-    def update(self):
-        self.snake.update()
+    def _update_world(self, delta):
+        self.snake.update(delta)
+        logger.info(self.snake.body)
 
         if self.snake.check_hit_bounds(self.bounds):
             logger.info("Ouch my head! T.T")
-            self.snake.dead = True
+            self.game_over = True
             self.listener.world_finished(self)
         if self.snake.check_bitten():
             logger.info("I'm a oroboros! Yay :D")
-            self.snake.dead = True
+            self.game_over = True
             self.listener.world_finished(self)
         if self.snake.check_can_eat(self.food):
-            logger.info("I see a yummy food :B")
+            logger.info("I see a yummy food at {} :B".format(self.food.position))
             self.snake.eat()
 
             self.score += self.food.score_value
             self.food = self._create_food()
+            self._make_game_harder()
 
             self.listener.food_created(self)
             self.listener.score_updated(self)
+
+    def _make_game_harder(self):
+        if self.score % 300 == 0:
+            if self.tick - self.tick_decrement > 0:
+                logger.info("FUUU!")
+                self.tick -= self.tick_decrement
