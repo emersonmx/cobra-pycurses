@@ -60,6 +60,30 @@ class Snake(object):
     def eat(self):
         self.body.append(self.tail)
 
+    def check_hit_bounds(self, bounds):
+        if self.head[0] < bounds[0]:
+            return True
+        if self.head[0] > bounds[2]:
+            return True
+        if self.head[1] < bounds[1]:
+            return True
+        if self.head[1] > bounds[3]:
+            return True
+
+        return False
+
+    def check_bitten(self):
+        if self.body.count(self.head) > 1:
+            return True
+
+        return False
+
+    def check_can_eat(self, food):
+        if food.position == self.head:
+            return True
+
+        return False
+
     def update(self):
         if not self.dead:
             head = self._move()
@@ -140,7 +164,7 @@ class Game(object):
         for _ in xrange(attemps):
             x = randint(self.bounds[0], self.bounds[2])
             y = randint(self.bounds[1], self.bounds[3])
-            point = [x, y]
+            point = (x, y)
             if point not in self.snake.body:
                 return Food(point, food_score)
 
@@ -181,13 +205,13 @@ class Game(object):
     def update(self):
         self.snake.update()
 
-        if self._snake_collide_wall():
+        if self.snake.check_hit_bounds(self.bounds):
             self.snake.dead = True
             self.listener.game_finished(self)
-        if self._snake_collide_herself():
+        if self.snake.check_bitten():
             self.snake.dead = True
             self.listener.game_finished(self)
-        if self._snake_collide_food():
+        if self.snake.check_can_eat(self.food):
             self.snake.eat()
 
             self.score += self.food.score_value
@@ -195,34 +219,3 @@ class Game(object):
 
             self.listener.food_created(self)
             self.listener.score_updated(self)
-
-    def _snake_collide_wall(self):
-        # TODO: Rename to a better name.
-        head = self.snake.head
-        if head[0] < self.bounds[0]:
-            return True
-        if head[0] > self.bounds[2]:
-            return True
-        if head[1] < self.bounds[1]:
-            return True
-        if head[1] > self.bounds[3]:
-            return True
-
-        return False
-
-    def _snake_collide_herself(self):
-        # TODO: Rename to a better name.
-        head = self.snake.head
-        if self.snake.body.count(head) > 1:
-            return True
-
-        return False
-
-    def _snake_collide_food(self):
-        # TODO: Rename to a better name.
-        head = self.snake.head
-        if ((head[0] == self.food.position[0]) and
-                (head[1] == self.food.position[1])):
-            return True
-
-        return False
