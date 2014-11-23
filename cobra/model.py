@@ -116,10 +116,10 @@ class Food(object):
 
 class GameListener(object):
 
-    def game_started(self, stage):
+    def world_started(self, stage):
         pass
 
-    def game_finished(self, stage):
+    def world_finished(self, stage):
         pass
 
     def food_created(self, stage):
@@ -129,7 +129,7 @@ class GameListener(object):
         pass
 
 
-class Game(object):
+class World(object):
 
     EASY = 1
     NORMAL = 2
@@ -137,7 +137,7 @@ class Game(object):
     VERY_HARD = 5
 
     def __init__(self):
-        super(Game, self).__init__()
+        super(World, self).__init__()
 
         self.dificulty = self.NORMAL
         self.speed = 200
@@ -153,7 +153,7 @@ class Game(object):
     def create(self):
         self.food = self._create_food()
 
-        self.listener.game_started(self)
+        self.listener.world_started(self)
         self.listener.food_created(self)
         self.listener.score_updated(self)
 
@@ -206,12 +206,15 @@ class Game(object):
         self.snake.update()
 
         if self.snake.check_hit_bounds(self.bounds):
+            logger.info("Ouch my head! T.T")
             self.snake.dead = True
-            self.listener.game_finished(self)
+            self.listener.world_finished(self)
         if self.snake.check_bitten():
+            logger.info("I'm a oroboros! Yay :D")
             self.snake.dead = True
-            self.listener.game_finished(self)
+            self.listener.world_finished(self)
         if self.snake.check_can_eat(self.food):
+            logger.info("I see a yummy food :B")
             self.snake.eat()
 
             self.score += self.food.score_value

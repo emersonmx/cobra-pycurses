@@ -3,7 +3,7 @@ import curses
 import logging
 logger = logging.getLogger(__name__)
 
-from cobra.model import Game, Snake
+from cobra.model import World, Snake
 from cobra.view import CursesView
 from cobra.gamepad import GamePad
 
@@ -41,27 +41,27 @@ class GameScreen(BaseScreen):
     def __init__(self, application):
         super(GameScreen, self).__init__(application)
 
-        self.game = None
+        self.world = None
         self.view = None
         self.gamepad = None
 
     def create(self):
         self._setup_curses()
-        self._setup_game()
+        self._setup_world()
 
     def _setup_curses(self):
         self.stdscr.nodelay(True)
 
-    def _setup_game(self):
+    def _setup_world(self):
         self.view = CursesView(self.stdscr)
-        self._create_game()
+        self._create_world()
         self._create_gamepad()
 
-    def _create_game(self):
-        self.game = Game()
-        self.game.snake = self._create_snake()
-        self.game.listener = self.view
-        self.game.create()
+    def _create_world(self):
+        self.world = World()
+        self.world.snake = self._create_snake()
+        self.world.listener = self.view
+        self.world.create()
 
     def _create_snake(self):
         size = 5
@@ -72,7 +72,7 @@ class GameScreen(BaseScreen):
         return snake
 
     def _create_gamepad(self):
-        snake = self.game.snake
+        snake = self.world.snake
         def snake_up(): snake.direction = Snake.UP
         def snake_right(): snake.direction = Snake.RIGHT
         def snake_down(): snake.direction = Snake.DOWN
@@ -90,10 +90,10 @@ class GameScreen(BaseScreen):
         self.stdscr.nodelay(False)
 
     def update(self):
-        curses.napms(self.game.update_delay())
+        curses.napms(self.world.update_delay())
 
         self.gamepad.input()
-        self.game.update()
+        self.world.update()
         self.view.draw()
 
         self.stdscr.refresh()

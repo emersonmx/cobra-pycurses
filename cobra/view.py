@@ -34,13 +34,13 @@ class CursesView(View, SnakeListener, GameListener):
             self.body.append(snake.head)
             self.tail.append(snake.tail)
 
-    def game_started(self, stage):
+    def world_started(self, stage):
         self.stage = stage
         self.update_bounds = True
         self.score = stage.score
         self.food = stage.food
 
-    def game_finished(self, stage):
+    def world_finished(self, stage):
         self.update_bounds = True
         self.score = stage.score
         logger.info("DEAD")
