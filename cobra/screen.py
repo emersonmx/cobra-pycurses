@@ -45,6 +45,8 @@ class GameScreen(BaseScreen):
         self.view = None
         self.gamepad = None
 
+        self.paused = False
+
     def create(self):
         self._setup_curses()
         self._setup_world()
@@ -77,7 +79,9 @@ class GameScreen(BaseScreen):
         def snake_right(): snake.direction = Snake.RIGHT
         def snake_down(): snake.direction = Snake.DOWN
         def snake_left(): snake.direction = Snake.LEFT
-        def pause(): logger.info("Pause Menu")
+        def pause():
+            self.paused = not self.paused
+            logger.info("Pause Menu")
 
         self.gamepad = GamePad(self.stdscr)
         self.gamepad.commands[GamePad.UP] = snake_up
@@ -91,8 +95,10 @@ class GameScreen(BaseScreen):
 
     def update(self, delta):
         curses.napms(10)
+
         self.gamepad.input()
-        self.world.update(delta)
+        if not self.paused:
+            self.world.update(delta)
         self.view.draw()
 
         self.stdscr.refresh()

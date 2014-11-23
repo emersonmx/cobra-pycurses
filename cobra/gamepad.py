@@ -1,5 +1,4 @@
 import curses
-import curses.ascii
 
 def no_command(): pass
 
@@ -24,7 +23,7 @@ class GamePad(object):
             self.DOWN: set([curses.KEY_DOWN, ord('j')]),
             self.LEFT: set([curses.KEY_LEFT, ord('h')]),
             self.ENTER: set([ord('\n'), ord(' ')]),
-            self.BACK: set([curses.ascii.ESC, ord('p')])
+            self.BACK: set([ord('p')])
         }
 
         self.commands = {
