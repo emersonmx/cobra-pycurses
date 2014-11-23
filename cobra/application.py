@@ -42,28 +42,27 @@ class Cobra(object):
     def update(self):
         self.screen.update()
 
-    def _setup(self, stdscr, args):
-        curses.resizeterm(24, 80)
-        curses.start_color()
-        curses.use_default_colors()
-        curses.curs_set(False)
-        stdscr.nodelay(True)
-        #stdscr.border()
-
-        self.stdscr = stdscr
-        self.window_size = stdscr.getmaxyx()
-        self.screen = GameScreen(self)
+    def run(self):
+        curses.wrapper(self._run, sys.argv)
 
     def _run(self, stdscr, args):
         self._setup(stdscr, args)
 
         self.create()
         while self._running:
-            self.update()
+            self.update() # TODO: pass delta time to update().
 
         self.dispose()
 
         sys.exit(self._error_code)
 
-    def run(self):
-        curses.wrapper(self._run, sys.argv)
+    def _setup(self, stdscr, args):
+        curses.resizeterm(24, 80)
+        curses.start_color()
+        curses.use_default_colors()
+        curses.curs_set(False)
+        stdscr.nodelay(True)
+
+        self.stdscr = stdscr
+        self.window_size = stdscr.getmaxyx()
+        self.screen = GameScreen(self)
