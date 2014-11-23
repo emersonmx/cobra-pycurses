@@ -57,7 +57,7 @@ class Snake(object):
         self._listener = listener
         self._listener.snake_updated(self)
 
-    def eat_food(self):
+    def eat(self):
         self.body.append(self.tail)
 
     def update(self):
@@ -188,7 +188,7 @@ class Game(object):
             self.snake.dead = True
             self.listener.game_finished(self)
         if self._snake_collide_food():
-            self.snake.eat_food()
+            self.snake.eat()
 
             self.score += self.food.score_value
             self.food = self._create_food()
