@@ -32,20 +32,20 @@ class GameScreen(Screen):
     def __init__(self, application):
         super(GameScreen, self).__init__(application)
 
-        self.cobra = None
+        self.game = None
         self.view = None
         self.gamepad = None
 
     def create(self):
         self.view = CursesView(self.stdscr)
-        self.create_cobra()
+        self.create_game()
         self.create_gamepad()
 
-    def create_cobra(self):
-        self.cobra = Game()
-        self.cobra.snake = self.create_snake()
-        self.cobra.listener = self.view
-        self.cobra.create()
+    def create_game(self):
+        self.game = Game()
+        self.game.snake = self.create_snake()
+        self.game.listener = self.view
+        self.game.create()
 
     def create_snake(self):
         size = 5
@@ -55,7 +55,7 @@ class GameScreen(Screen):
         return snake
 
     def create_gamepad(self):
-        snake = self.cobra.snake
+        snake = self.game.snake
         def snake_up(): snake.direction = Snake.UP
         def snake_right(): snake.direction = Snake.RIGHT
         def snake_down(): snake.direction = Snake.DOWN
@@ -70,10 +70,10 @@ class GameScreen(Screen):
         self.gamepad.bind_command(GamePad.BACK, pause)
 
     def update(self):
-        curses.napms(self.cobra.update_delay())
+        curses.napms(self.game.update_delay())
 
         self.gamepad.input()
-        self.cobra.update()
+        self.game.update()
         self.view.draw()
 
         self.stdscr.refresh()
