@@ -87,7 +87,7 @@ class Food(object):
         self.score_value = score_value
 
 
-class StageListener(object):
+class GameListener(object):
 
     def game_started(self, stage):
         pass
@@ -121,7 +121,7 @@ class Game(object):
         self.snake = None
         self.food = None
 
-        self.listener = StageListener()
+        self.listener = GameListener()
 
     def create(self):
         self.food = self.create_food()

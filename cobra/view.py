@@ -1,7 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from cobra.model import SnakeListener, StageListener
+from cobra.model import SnakeListener, GameListener
 
 
 class View(object):
@@ -10,7 +10,7 @@ class View(object):
         pass
 
 
-class CursesView(View, SnakeListener, StageListener):
+class CursesView(View, SnakeListener, GameListener):
 
     def __init__(self, stdscr):
         super(CursesView, self).__init__()
