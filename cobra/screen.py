@@ -3,19 +3,19 @@ import curses
 import logging
 logger = logging.getLogger(__name__)
 
-from cobra.model import Cobra, Snake
+from cobra.model import Game, Snake
 from cobra.view import CursesView
 from cobra.gamepad import GamePad
 
 
 class Screen(object):
 
-    def __init__(self, game):
+    def __init__(self, application):
         super(Screen, self).__init__()
 
-        self.game = game
-        self.stdscr = game.stdscr
-        self.window_size = game.window_size
+        self.application = application
+        self.stdscr = application.stdscr
+        self.window_size = application.window_size
 
     def create(self):
         pass
@@ -29,8 +29,8 @@ class Screen(object):
 
 class GameScreen(Screen):
 
-    def __init__(self, game):
-        super(GameScreen, self).__init__(game)
+    def __init__(self, application):
+        super(GameScreen, self).__init__(application)
 
         self.cobra = None
         self.view = None
@@ -42,7 +42,7 @@ class GameScreen(Screen):
         self.create_gamepad()
 
     def create_cobra(self):
-        self.cobra = Cobra()
+        self.cobra = Game()
         self.cobra.snake = self.create_snake()
         self.cobra.listener = self.view
         self.cobra.create()

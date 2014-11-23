@@ -4,10 +4,10 @@ import curses
 from cobra.screen import GameScreen
 
 
-class Game(object):
+class Cobra(object):
 
     def __init__(self):
-        super(Game, self).__init__()
+        super(Cobra, self).__init__()
 
         self.stdscr = None
         self.window_size = []

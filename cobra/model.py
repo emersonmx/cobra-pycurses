@@ -102,7 +102,7 @@ class StageListener(object):
         pass
 
 
-class Cobra(object):
+class Game(object):
 
     EASY = 1
     NORMAL = 2
@@ -110,10 +110,10 @@ class Cobra(object):
     VERY_HARD = 5
 
     def __init__(self):
-        super(Cobra, self).__init__()
+        super(Game, self).__init__()
 
-        self.game_dificulty = self.NORMAL
-        self.game_speed = 200
+        self.dificulty = self.NORMAL
+        self.speed = 200
 
         self.bounds = (1, 2, 78, 22)
         self.score = 0
@@ -138,10 +138,10 @@ class Cobra(object):
             y = randint(self.bounds[1], self.bounds[3])
             point = [x, y]
             if point not in self.snake.body:
-                return Food(point, food_score * self.game_dificulty)
+                return Food(point, food_score * self.dificulty)
 
         return Food(self._find_closest_tail_position(),
-                    food_score * self.game_dificulty)
+                    food_score * self.dificulty)
 
     def _find_closest_tail_position(self):
         tail = self.snake.body[0]
@@ -171,7 +171,7 @@ class Cobra(object):
         return False
 
     def update_delay(self):
-        return self.game_speed / self.game_dificulty
+        return self.speed / self.dificulty
 
     def update(self):
         self.snake.update()

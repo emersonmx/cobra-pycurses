@@ -1,4 +1,4 @@
-from cobra.game import Game
+from cobra.application import Cobra
 
 def setup_logger():
     import logging
@@ -7,8 +7,8 @@ def setup_logger():
 def main():
     setup_logger()
 
-    game = Game()
-    game.run()
+    application = Cobra()
+    application.run()
 
 if __name__ == "__main__":
     main()
