@@ -31,7 +31,8 @@ class GamePad(object):
         self.commands[button] = command
 
     def input(self):
-        command = self._null_command
+        def no_command(): pass
+        command = no_command
 
         key = self._input_key()
         if key in self.buttons[self.UP]:
@@ -48,9 +49,6 @@ class GamePad(object):
             command = self.commands[self.BACK]
 
         command()
-
-    def _null_command(self):
-        pass
 
     def _input_key(self):
         key = self.stdscr.getch()
