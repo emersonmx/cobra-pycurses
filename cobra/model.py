@@ -63,7 +63,7 @@ class Snake(object):
     def eat(self):
         self.body.append(self.tail)
 
-    def update(self, delta):
+    def update(self):
         self._direction = self._input_direction
         head = self._move()
         self.body.appendleft(head)
@@ -248,7 +248,7 @@ class World(object):
                 self._update_world(delta)
 
     def _update_world(self, delta):
-        self.snake.update(delta)
+        self.snake.update()
 
         self._check_snake_hit_bounds()
         self._check_snake_bitten()
