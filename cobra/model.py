@@ -64,8 +64,8 @@ class Snake(object):
             self.listener.head_updated(head)
             self.listener.tail_updated(tail)
 
-    def _move(self, right):
-        head = [right[0], right[1]]
+    def _move(self, head):
+        head = [head[0], head[1]]
         if self.direction == self.UP:
             head[1] -= 1
         elif self.direction == self.DOWN:
@@ -124,13 +124,14 @@ class Game(object):
         self.listener = GameListener()
 
     def create(self):
-        self.food = self.create_food()
+        self.food = self._create_food()
 
         self.listener.game_started(self)
         self.listener.food_created(self)
         self.listener.score_updated(self)
 
-    def create_food(self):
+    def _create_food(self):
+        # TODO: Move to Food class.
         attemps = 3
         food_score = 100
         for _ in xrange(attemps):
@@ -138,12 +139,13 @@ class Game(object):
             y = randint(self.bounds[1], self.bounds[3])
             point = [x, y]
             if point not in self.snake.body:
-                return Food(point, food_score * self.dificulty)
+                return Food(point, food_score)
 
         return Food(self._find_closest_tail_position(),
                     food_score * self.dificulty)
 
     def _find_closest_tail_position(self):
+        # TODO: Rename to a better name.
         tail = self.snake.body[0]
         left = (tail[0] - 1, tail[1])
         right = (tail[0] + 1, tail[1])
@@ -186,12 +188,13 @@ class Game(object):
             self.snake.eat_food()
 
             self.score += self.food.score_value
-            self.food = self.create_food()
+            self.food = self._create_food()
 
             self.listener.food_created(self)
             self.listener.score_updated(self)
 
     def _snake_collide_wall(self):
+        # TODO: Rename to a better name.
         head = self.snake.body[-1]
         if head[0] < self.bounds[0]:
             return True
@@ -205,6 +208,7 @@ class Game(object):
         return False
 
     def _snake_collide_herself(self):
+        # TODO: Rename to a better name.
         head = self.snake.body[-1]
         if self.snake.body.count(head) > 1:
             return True
@@ -212,6 +216,7 @@ class Game(object):
         return False
 
     def _snake_collide_food(self):
+        # TODO: Rename to a better name.
         head = self.snake.body[-1]
         if ((head[0] == self.food.position[0]) and
                 (head[1] == self.food.position[1])):
