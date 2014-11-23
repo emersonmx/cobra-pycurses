@@ -38,23 +38,23 @@ class GameScreen(Screen):
 
     def create(self):
         self.view = CursesView(self.stdscr)
-        self.create_game()
-        self.create_gamepad()
+        self._create_game()
+        self._create_gamepad()
 
-    def create_game(self):
+    def _create_game(self):
         self.game = Game()
-        self.game.snake = self.create_snake()
+        self.game.snake = self._create_snake()
         self.game.listener = self.view
         self.game.create()
 
-    def create_snake(self):
+    def _create_snake(self):
         size = 5
         x, y = self.window_size[1] / 2 - size, self.window_size[0] / 2
         snake = Snake([(x+i, y) for i in xrange(size)])
         snake.listener = self.view
         return snake
 
-    def create_gamepad(self):
+    def _create_gamepad(self):
         snake = self.game.snake
         def snake_up(): snake.direction = Snake.UP
         def snake_right(): snake.direction = Snake.RIGHT
