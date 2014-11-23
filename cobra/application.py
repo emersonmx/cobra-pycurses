@@ -23,9 +23,9 @@ class Cobra(object):
         return self._screen
 
     @screen.setter
-    def screen(self, value):
+    def screen(self, screen):
         self._screen.dispose()
-        self._screen = value
+        self._screen = screen
         self._screen.create()
 
     def exit(self, error_code=0):

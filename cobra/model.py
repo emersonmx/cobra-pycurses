@@ -36,9 +36,9 @@ class Snake(object):
         return self._direction
 
     @direction.setter
-    def direction(self, value):
-        if self._can_turn(value):
-            self._direction = value
+    def direction(self, direction):
+        if self._can_turn(direction):
+            self._direction = direction
 
     def _can_turn(self, direction):
         return ((direction + self._direction) % 2) == 1
@@ -48,8 +48,8 @@ class Snake(object):
         return self._listener
 
     @listener.setter
-    def listener(self, value):
-        self._listener = value
+    def listener(self, listener):
+        self._listener = listener
         self._listener.body_updated(self.body)
 
     def eat_food(self):
