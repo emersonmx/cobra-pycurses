@@ -1,7 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
-from random import randint
+from random import choice
 from collections import deque
 
 
@@ -104,25 +104,10 @@ class Snake(object):
         return False
 
     def check_can_eat(self, food):
-        if food.position == self.head:
+        if food == self.head:
             return True
 
         return False
-
-    def check_is_full(self, area):
-        if area == len(self.body):
-            return True
-
-        return False
-
-
-class Food(object):
-
-    def __init__(self, position, score_value=100):
-        super(Food, self).__init__()
-
-        self.position = position
-        self.score_value = score_value
 
 
 class WorldListener(object):
@@ -146,6 +131,7 @@ class World(object):
         super(World, self).__init__()
 
         self.bounds = (1, 2, 78, 22)
+        self._screen_area = None
         self.game_over = False
 
         self.snake = None
@@ -193,43 +179,27 @@ class World(object):
         self.bounds[3] = height
 
     def create(self):
+        self._screen_area = self._screen_area_create()
         self.food = self._create_food()
 
         self.listener.world_started(self)
         self.listener.food_created(self)
         self.listener.score_updated(self)
 
+    def _screen_area_create(self):
+        area = []
+        for i in xrange(self.x, self.width + 1):
+            for j in xrange(self.y, self.height + 1):
+                area.append((i, j))
+
+        return frozenset(area)
+
     def _create_food(self):
-        # TODO: Move to Food class.
-        attemps = 3
-        for _ in xrange(attemps):
-            x = randint(self.x, self.width)
-            y = randint(self.y, self.height)
-            point = (x, y)
-            if point not in self.snake.body:
-                return Food(point, self.food_score)
+        food_area = list(self._screen_area.difference(self.snake.body))
+        if food_area:
+            return choice(food_area)
 
-        return Food(self._find_closest_tail_position(), self.food_score)
-
-    def _find_closest_tail_position(self):
-        # TODO: Rename to a better name and still bugged.
-        tail = self.snake.tail
-        left = (tail[0] - 1, tail[1])
-        right = (tail[0] + 1, tail[1])
-        up = (tail[0], tail[1] - 1)
-        down = (tail[0], tail[1] + 1)
-
-        if self._food_position_is_valid(left):
-            return left
-        if self._food_position_is_valid(right):
-            return right
-        if self._food_position_is_valid(up):
-            return up
-        if self._food_position_is_valid(down):
-            return down
-
-    def _food_position_is_valid(self, position):
-        return position not in self.snake.body and self._inside_bounds(position)
+        return None
 
     def _inside_bounds(self, point):
         x, y = point
@@ -270,22 +240,22 @@ class World(object):
     def _check_snake_eat_food(self):
         if self.snake.check_can_eat(self.food):
             logger.info("I see a yummy food at {} :B".format(
-                self.food.position))
+                self.food))
             self.snake.eat()
 
-            self.score += self.food.score_value
+            self.score += self.food_score
             self.listener.score_updated(self)
 
-            if self.snake.check_is_full(self._bounds_area()):
+            self.food = self._create_food()
+            if self.food:
+                #if self.score % self.score_speed_boost == 0:
+                    #self._increase_snake_speed()
+
+                self.listener.food_created(self)
+            else:
                 logger.info("I'm full man... I eat {} foods by the way".format(
                     len(self.snake.body)))
                 self.game_over = True
-            else:
-                self.food = self._create_food()
-                if self.score % self.score_speed_boost == 0:
-                    self._increase_snake_speed()
-
-                self.listener.food_created(self)
 
     def _bounds_area(self):
         return (self.width - self.x) * (self.height - self.y)

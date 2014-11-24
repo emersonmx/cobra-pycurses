@@ -83,7 +83,7 @@ class CursesView(View, SnakeListener, WorldListener):
     def _draw_food(self):
         if self.food:
             bounds = self.stage.bounds
-            x, y = self.food.position
+            x, y = self.food
             self.stdscr.addch(y, x, '*')
             self.food = None
 
