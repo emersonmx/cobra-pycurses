@@ -249,8 +249,8 @@ class World(object):
 
             self.food = self._create_food()
             if self.food:
-                #if self.score % self.score_speed_boost == 0:
-                    #self._increase_snake_speed()
+                if self.score % self.score_speed_boost == 0:
+                    self._increase_snake_speed()
 
                 self.listener.food_created(self)
             else:
