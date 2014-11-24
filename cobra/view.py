@@ -5,6 +5,7 @@ from cobra.model import SnakeListener, WorldListener
 
 
 class View(object):
+    # TODO: Renderer is a better name.
 
     def draw(self):
         pass
@@ -15,9 +16,11 @@ class CursesView(View, SnakeListener, WorldListener):
     def __init__(self, stdscr):
         super(CursesView, self).__init__()
 
+        # TODO: Too many attributes (8/7).
+
         self.stdscr = stdscr
 
-        self.stage = None
+        self.world = None
         self.update_bounds = False
         self.score = None
         self.food = None
@@ -33,22 +36,22 @@ class CursesView(View, SnakeListener, WorldListener):
     def snake_removed_parts(self, parts):
         self.removed_parts = parts
 
-    def world_started(self, stage):
-        self.stage = stage
+    def world_started(self, world):
+        self.world = world
         self.update_bounds = True
-        self.score = stage.score
-        self.food = stage.food
+        self.score = world.score
+        self.food = world.food
 
-    def world_finished(self, stage):
+    def world_finished(self, world):
         self.update_bounds = True
-        self.score = stage.score
+        self.score = world.score
         logger.info("DEAD")
 
-    def food_created(self, stage):
-        self.food = stage.food
+    def food_created(self, world):
+        self.food = world.food
 
-    def score_updated(self, stage):
-        self.score = stage.score
+    def score_updated(self, world):
+        self.score = world.score
         logger.info("Score updated to {}".format(self.score))
 
     def draw(self):
@@ -70,9 +73,9 @@ class CursesView(View, SnakeListener, WorldListener):
     def _draw_bounds(self):
         if self.update_bounds:
             self.stdscr.border('|', '|', ' ', '-', ' ', ' ', '+', '+')
-            bounds = self.stage.bounds
-            bar = "+{}+".format('-' * (bounds[2]))
-            self.stdscr.addstr(bounds[1] - 1, 0, bar)
+            bounds = self.world.bounds
+            top_bar = "+{}+".format('-' * (bounds[2]))
+            self.stdscr.addstr(bounds[1] - 1, 0, top_bar)
             self.update_bounds = False
 
     def _draw_score(self):
@@ -82,7 +85,6 @@ class CursesView(View, SnakeListener, WorldListener):
 
     def _draw_food(self):
         if self.food:
-            bounds = self.stage.bounds
             x, y = self.food
             self.stdscr.addch(y, x, '*')
             self.food = None

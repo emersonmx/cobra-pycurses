@@ -112,16 +112,16 @@ class Snake(object):
 
 class WorldListener(object):
 
-    def world_started(self, stage):
+    def world_started(self, world):
         pass
 
-    def world_finished(self, stage):
+    def world_finished(self, world):
         pass
 
-    def food_created(self, stage):
+    def food_created(self, world):
         pass
 
-    def score_updated(self, stage):
+    def score_updated(self, world):
         pass
 
 
@@ -129,6 +129,7 @@ class World(object):
 
     def __init__(self):
         super(World, self).__init__()
+        # TODO: Reduces attributes.
 
         self.bounds = (1, 2, 78, 22)
         self._screen_area = None

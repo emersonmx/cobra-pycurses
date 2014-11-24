@@ -1,4 +1,3 @@
-import sys
 import curses
 import logging
 logger = logging.getLogger(__name__)
@@ -75,10 +74,14 @@ class GameScreen(BaseScreen):
 
     def _create_gamepad(self):
         snake = self.world.snake
-        def snake_up(): snake.direction = Snake.UP
-        def snake_right(): snake.direction = Snake.RIGHT
-        def snake_down(): snake.direction = Snake.DOWN
-        def snake_left(): snake.direction = Snake.LEFT
+        def snake_up():
+            snake.direction = Snake.UP
+        def snake_right():
+            snake.direction = Snake.RIGHT
+        def snake_down():
+            snake.direction = Snake.DOWN
+        def snake_left():
+            snake.direction = Snake.LEFT
         def pause():
             self.paused = not self.paused
             logger.info("Pause Menu")
