@@ -57,7 +57,7 @@ class Cobra(object):
         self._setup(stdscr, args)
 
         while self._running:
-            self.update() # TODO: pass delta time to update().
+            self.update()
 
         sys.exit(self._error_code)
 
