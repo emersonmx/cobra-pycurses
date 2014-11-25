@@ -9,7 +9,10 @@ from cobra.gamepad import GamePad
 
 class Screen(object):
 
-    def create(self):
+    def show(self):
+        pass
+
+    def hide(self):
         pass
 
     def dispose(self):
@@ -44,14 +47,12 @@ class GameScreen(BaseScreen):
 
         self.paused = False
 
+        self.create()
+
     def create(self):
-        self._setup_curses()
         self._create_renderer()
         self._create_world()
         self._create_gamepad()
-
-    def _setup_curses(self):
-        self.stdscr.nodelay(True)
 
     def _create_renderer(self):
         self.renderer = CursesRenderer(self.stdscr)
@@ -94,6 +95,10 @@ class GameScreen(BaseScreen):
         self.gamepad.commands[GamePad.DOWN] = snake_down
         self.gamepad.commands[GamePad.LEFT] = snake_left
         self.gamepad.commands[GamePad.BACK] = pause
+
+    def show(self):
+        self.stdscr.nodelay(True)
+        self.stdscr.clear()
 
     def dispose(self):
         self.stdscr.nodelay(False)

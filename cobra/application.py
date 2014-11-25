@@ -24,16 +24,13 @@ class Cobra(object):
 
     @screen.setter
     def screen(self, screen):
-        self._screen.dispose()
+        self._screen.hide()
         self._screen = screen
-        self._screen.create()
+        self._screen.show()
 
     def exit(self, error_code=0):
         self._error_code = error_code
         self._running = False
-
-    def create(self):
-        self.screen.create()
 
     def dispose(self):
         self.screen.dispose()
