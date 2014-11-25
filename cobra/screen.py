@@ -22,8 +22,6 @@ class Screen(object):
 class BaseScreen(Screen):
 
     def __init__(self, application):
-        super(BaseScreen, self).__init__()
-
         self.application = application
 
     @property
@@ -38,7 +36,7 @@ class BaseScreen(Screen):
 class GameScreen(BaseScreen):
 
     def __init__(self, application):
-        super(GameScreen, self).__init__(application)
+        BaseScreen.__init__(self, application)
 
         self.world = None
         self.renderer = None

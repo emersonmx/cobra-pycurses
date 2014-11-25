@@ -14,8 +14,6 @@ class GamePad(object):
     ALL_BUTTONS = 63
 
     def __init__(self, stdscr):
-        super(GamePad, self).__init__()
-
         self.stdscr = stdscr
         self.buttons = {
             self.UP: set([curses.KEY_UP, ord('k')]),

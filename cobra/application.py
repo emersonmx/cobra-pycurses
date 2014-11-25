@@ -9,8 +9,6 @@ from cobra.screen import Screen as NoScreen
 class Cobra(object):
 
     def __init__(self):
-        super(Cobra, self).__init__()
-
         self.stdscr = None
         self.window_size = None
 

@@ -23,8 +23,6 @@ class CursesUpdateContext(object):
 class CursesRenderer(Renderer, SnakeListener, WorldListener):
 
     def __init__(self, stdscr):
-        super(CursesRenderer, self).__init__()
-
         self.stdscr = stdscr
 
         self.context = CursesUpdateContext()

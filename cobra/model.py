@@ -23,8 +23,6 @@ class Snake(object):
     DIRECTION_SIZE = 4
 
     def __init__(self, body):
-        super(Snake, self).__init__()
-
         self.body = deque(body)
         self._direction = self.RIGHT
         self._input_direction = self._direction
@@ -128,7 +126,6 @@ class WorldListener(object):
 class World(object):
 
     def __init__(self):
-        super(World, self).__init__()
         # TODO: Reduces attributes.
 
         self.bounds = (1, 2, 78, 22)
