@@ -77,7 +77,7 @@ class CursesRenderer(Renderer, SnakeListener, WorldListener):
     def _render_score(self):
         if self.context.score != None:
             self.stdscr.addstr(0, 0, "Score: {}".format(self.context.score))
-            self.context.score = 0
+            self.context.score = None
 
     def _render_food(self):
         if self.context.food:

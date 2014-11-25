@@ -123,24 +123,30 @@ class WorldListener(object):
         pass
 
 
-class World(object):
+class WorldConfig(object):
 
     def __init__(self):
-        # TODO: Reduces attributes.
-
         self.bounds = (1, 2, 78, 22)
-        self._screen_area = None
+        self.food_score = 100
+
+        self.tick = 0.2
+        self.tick_decrement_ratio = 0.1
+        self.speed_boost_at_score = 300
+
+
+class World(object):
+
+    def __init__(self, config):
+        self.config = config
+
+        self._screen_area = ()
         self.game_over = False
 
         self.snake = None
-        self.food = None
-        self.food_score = 100
+        self.food = ()
         self.score = 0
 
         self._tick_time = 0
-        self.tick = 0.2
-        self.tick_decrement_ratio = 0.1
-        self.score_speed_boost = 300
 
         self.listener = WorldListener()
 
@@ -175,6 +181,14 @@ class World(object):
     @height.setter
     def height(self, height):
         self.bounds[3] = height
+
+    @property
+    def bounds(self):
+        return self.config.bounds
+
+    @bounds.setter
+    def bounds(self, bounds):
+        self.config.bounds = bounds
 
     def create(self):
         self._screen_area = self._screen_area_create()
@@ -211,8 +225,8 @@ class World(object):
     def update(self, delta):
         if not self.game_over:
             self._tick_time += delta
-            while self._tick_time > self.tick:
-                self._tick_time -= self.tick
+            while self._tick_time > self.config.tick:
+                self._tick_time -= self.config.tick
                 self._update_world(delta)
 
     def _update_world(self, delta):
@@ -241,12 +255,12 @@ class World(object):
                 self.food))
             self.snake.eat()
 
-            self.score += self.food_score
+            self.score += self.config.food_score
             self.listener.score_updated(self)
 
             self.food = self._create_food()
             if self.food:
-                if self.score % self.score_speed_boost == 0:
+                if self.score % self.config.speed_boost_at_score == 0:
                     self._increase_snake_speed()
 
                 self.listener.food_created(self)
@@ -259,7 +273,8 @@ class World(object):
         return (self.width - self.x) * (self.height - self.y)
 
     def _increase_snake_speed(self):
-        decrement = self.tick * self.tick_decrement_ratio
-        if self.tick - decrement > 0:
-            self.tick -= decrement
-            logger.info("Snake speed updated to {} u/s".format(1. / self.tick))
+        decrement = self.config.tick * self.config.tick_decrement_ratio
+        if self.config.tick - decrement > 0:
+            self.config.tick -= decrement
+            speed = 1. / self.config.tick
+            logger.info("Snake speed updated to {} u/s".format(speed))

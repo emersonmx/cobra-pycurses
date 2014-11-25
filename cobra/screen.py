@@ -2,7 +2,7 @@ import curses
 import logging
 logger = logging.getLogger(__name__)
 
-from cobra.model import World, Snake
+from cobra.model import WorldConfig, World, Snake
 from cobra.renderer import CursesRenderer
 from cobra.gamepad import GamePad
 
@@ -46,21 +46,25 @@ class GameScreen(BaseScreen):
 
     def create(self):
         self._setup_curses()
-        self._setup_world()
+        self._create_renderer()
+        self._create_world()
+        self._create_gamepad()
 
     def _setup_curses(self):
         self.stdscr.nodelay(True)
 
-    def _setup_world(self):
+    def _create_renderer(self):
         self.renderer = CursesRenderer(self.stdscr)
-        self._create_world()
-        self._create_gamepad()
 
     def _create_world(self):
-        self.world = World()
+        config = self._create_world_config()
+        self.world = World(config)
         self.world.snake = self._create_snake()
         self.world.listener = self.renderer
         self.world.create()
+
+    def _create_world_config(self):
+        return WorldConfig()
 
     def _create_snake(self):
         size = 5
