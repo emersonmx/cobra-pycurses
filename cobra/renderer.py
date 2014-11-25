@@ -10,48 +10,47 @@ class Renderer(object):
         pass
 
 
+class CursesUpdateContext(object):
+
+    def __init__(self):
+        self.score = None
+        self.food = ()
+        self.bounds = ()
+        self.updated_parts = ()
+        self.removed_parts = ()
+
+
 class CursesRenderer(Renderer, SnakeListener, WorldListener):
 
     def __init__(self, stdscr):
         super(CursesRenderer, self).__init__()
 
-        # TODO: Too many attributes (8/7).
-
         self.stdscr = stdscr
 
-        self.world = None
-        self.update_bounds = False
-        self.score = None
-        self.food = None
-
-        self.first = True
-
-        self.updated_parts = []
-        self.removed_parts = []
+        self.context = CursesUpdateContext()
 
     def snake_updated_parts(self, parts):
-        self.updated_parts = parts
+        self.context.updated_parts = parts
 
     def snake_removed_parts(self, parts):
-        self.removed_parts = parts
+        self.context.removed_parts = parts
 
     def world_started(self, world):
-        self.world = world
-        self.update_bounds = True
-        self.score = world.score
-        self.food = world.food
+        self.context.bounds = world.bounds
+        self.context.score = world.score
+        self.context.food = world.food
 
     def world_finished(self, world):
-        self.update_bounds = True
-        self.score = world.score
+        self.context.bounds = world.bounds
+        self.context.score = world.score
         logger.info("DEAD")
 
     def food_created(self, world):
-        self.food = world.food
+        self.context.food = world.food
 
     def score_updated(self, world):
-        self.score = world.score
-        logger.info("Score updated to {}".format(self.score))
+        self.context.score = world.score
+        logger.info("Score updated to {}".format(world.score))
 
     def render(self):
         self._render_snake()
@@ -60,31 +59,30 @@ class CursesRenderer(Renderer, SnakeListener, WorldListener):
         self._render_food()
 
     def _render_snake(self):
-        for x, y in self.removed_parts:
+        for x, y in self.context.removed_parts:
             self.stdscr.addch(y, x, ' ')
 
-        for x, y in self.updated_parts:
+        for x, y in self.context.updated_parts:
             self.stdscr.addch(y, x, '#')
 
-        self.updated_parts = []
-        self.removed_parts = []
+        self.context.updated_parts = ()
+        self.context.removed_parts = ()
 
     def _render_bounds(self):
-        if self.update_bounds:
+        if self.context.bounds:
+            bounds = self.context.bounds
             self.stdscr.border('|', '|', ' ', '-', ' ', ' ', '+', '+')
-            bounds = self.world.bounds
             top_bar = "+{}+".format('-' * (bounds[2]))
             self.stdscr.addstr(bounds[1] - 1, 0, top_bar)
-            self.update_bounds = False
+            self.context.bounds = ()
 
     def _render_score(self):
-        if self.score != None:
-            self.stdscr.addstr(0, 0, "Score: {}".format(self.score))
-            self.score = None
+        if self.context.score != None:
+            self.stdscr.addstr(0, 0, "Score: {}".format(self.context.score))
+            self.context.score = 0
 
     def _render_food(self):
-        if self.food:
-            x, y = self.food
+        if self.context.food:
+            x, y = self.context.food
             self.stdscr.addch(y, x, '*')
-            self.food = None
-
+            self.context.food = ()
