@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from cobra.model import World, Snake
-from cobra.view import CursesView
+from cobra.renderer import CursesRenderer
 from cobra.gamepad import GamePad
 
 
@@ -41,7 +41,7 @@ class GameScreen(BaseScreen):
         super(GameScreen, self).__init__(application)
 
         self.world = None
-        self.view = None
+        self.renderer = None
         self.gamepad = None
 
         self.paused = False
@@ -54,14 +54,14 @@ class GameScreen(BaseScreen):
         self.stdscr.nodelay(True)
 
     def _setup_world(self):
-        self.view = CursesView(self.stdscr)
+        self.renderer = CursesRenderer(self.stdscr)
         self._create_world()
         self._create_gamepad()
 
     def _create_world(self):
         self.world = World()
         self.world.snake = self._create_snake()
-        self.world.listener = self.view
+        self.world.listener = self.renderer
         self.world.create()
 
     def _create_snake(self):
@@ -69,7 +69,7 @@ class GameScreen(BaseScreen):
         x, y = self.window_size[1] / 2, self.window_size[0] / 2
         snake = Snake([(x-i, y) for i in xrange(size)])
         logger.info("Snake body {}".format(str(snake.body)))
-        snake.listener = self.view
+        snake.listener = self.renderer
         return snake
 
     def _create_gamepad(self):
@@ -102,6 +102,6 @@ class GameScreen(BaseScreen):
         self.gamepad.input()
         if not self.paused:
             self.world.update(delta)
-        self.view.draw()
+        self.renderer.render()
 
         self.stdscr.refresh()
