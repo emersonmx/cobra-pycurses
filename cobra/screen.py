@@ -100,7 +100,7 @@ class GameScreen(BaseScreen):
         self.stdscr.nodelay(True)
         self.stdscr.clear()
 
-    def dispose(self):
+    def hide(self):
         self.stdscr.nodelay(False)
 
     def update(self, delta):
