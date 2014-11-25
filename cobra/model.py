@@ -211,7 +211,7 @@ class World(object):
         if food_area:
             return choice(food_area)
 
-        return None
+        return ()
 
     def _inside_bounds(self, point):
         x, y = point
@@ -251,8 +251,7 @@ class World(object):
 
     def _check_snake_eat_food(self):
         if self.snake.check_can_eat(self.food):
-            logger.info("I see a yummy food at {} :B".format(
-                self.food))
+            logger.info("I see a yummy food at {} :B".format(self.food))
             self.snake.eat()
 
             self.score += self.config.food_score

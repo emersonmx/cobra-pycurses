@@ -10,7 +10,7 @@ class Cobra(object):
 
     def __init__(self):
         self.stdscr = None
-        self.window_size = None
+        self.window_size = ()
 
         self._running = True
         self._error_code = 0

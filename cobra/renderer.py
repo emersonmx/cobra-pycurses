@@ -12,8 +12,10 @@ class Renderer(object):
 
 class CursesUpdateContext(object):
 
+    NO_SCORE = -1
+
     def __init__(self):
-        self.score = None
+        self.score = self.NO_SCORE
         self.food = ()
         self.bounds = ()
         self.updated_parts = ()
@@ -75,9 +77,9 @@ class CursesRenderer(Renderer, SnakeListener, WorldListener):
             self.context.bounds = ()
 
     def _render_score(self):
-        if self.context.score != None:
+        if self.context.score != CursesUpdateContext.NO_SCORE:
             self.stdscr.addstr(0, 0, "Score: {}".format(self.context.score))
-            self.context.score = None
+            self.context.score = CursesUpdateContext.NO_SCORE
 
     def _render_food(self):
         if self.context.food:
