@@ -108,9 +108,35 @@ class GameScreen(BaseScreen):
     def update(self, delta):
         curses.napms(10)
 
-        self.gamepad.input()
+        self.process_input()
         if not self._paused:
             self.world.update(delta)
-        self.renderer.render()
 
+        self.render()
+
+    def process_input(self):
+        self.gamepad.process_input()
+
+    def render(self):
+        self.renderer.render()
         self.stdscr.refresh()
+
+
+class GamePauseScreen(BaseScreen):
+
+    def __init__(self, application, game_screen):
+        BaseScreen.__init__(self, application)
+
+        self.game_screen = game_screen
+
+    def show(self):
+        pass
+
+    def hide(self):
+        pass
+
+    def dispose(self):
+        pass
+
+    def update(self, delta):
+        pass

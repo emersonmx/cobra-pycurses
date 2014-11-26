@@ -49,7 +49,7 @@ class CursesGamePad(GamePad):
             self.BACK: set([ord('p')])
         }
 
-    def input(self):
+    def process_input(self):
         command = GamePad.no_command
 
         key = self._input_key()
