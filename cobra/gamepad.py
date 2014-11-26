@@ -1,7 +1,5 @@
 import curses
 
-def no_command(): pass
-
 
 class GamePad(object):
 
@@ -13,7 +11,34 @@ class GamePad(object):
     BACK = 32
     ALL_BUTTONS = 63
 
+    @staticmethod
+    def no_command():
+        pass
+
+    def __init__(self):
+        self.buttons = {}
+        self.commands = {}
+        self.reset_commands()
+
+    def reset_commands(self):
+        self.commands = {
+            self.UP: self.no_command,
+            self.RIGHT: self.no_command,
+            self.DOWN: self.no_command,
+            self.LEFT: self.no_command,
+            self.ENTER: self.no_command,
+            self.BACK: self.no_command,
+        }
+
+    def process_input(self):
+        pass
+
+
+class CursesGamePad(GamePad):
+
     def __init__(self, stdscr):
+        GamePad.__init__(self)
+
         self.stdscr = stdscr
         self.buttons = {
             self.UP: set([curses.KEY_UP, ord('k')]),
@@ -24,17 +49,8 @@ class GamePad(object):
             self.BACK: set([ord('p')])
         }
 
-        self.commands = {
-            self.UP: no_command,
-            self.RIGHT: no_command,
-            self.DOWN: no_command,
-            self.LEFT: no_command,
-            self.ENTER: no_command,
-            self.BACK: no_command,
-        }
-
     def input(self):
-        command = no_command
+        command = GamePad.no_command
 
         key = self._input_key()
         if key in self.buttons[self.UP]:

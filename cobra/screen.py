@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 
 from cobra.model import WorldConfig, World, Snake
 from cobra.renderer import CursesRenderer
-from cobra.gamepad import GamePad
+from cobra.gamepad import GamePad, CursesGamePad
 
 
 class Screen(object):
@@ -89,7 +89,7 @@ class GameScreen(BaseScreen):
             self.paused = not self.paused
             logger.info("Pause Menu")
 
-        self.gamepad = GamePad(self.stdscr)
+        self.gamepad = CursesGamePad(self.stdscr)
         self.gamepad.commands[GamePad.UP] = snake_up
         self.gamepad.commands[GamePad.RIGHT] = snake_right
         self.gamepad.commands[GamePad.DOWN] = snake_down
