@@ -92,7 +92,7 @@ class GameScreen(BaseScreen):
         def snake_left():
             self.world.snake.direction = Snake.LEFT
         def pause():
-            self._paused = not self._paused
+            self.application.screen = GamePauseScreen(self.application, self)
             logger.info("Pause Menu")
 
         self.gamepad.commands[GamePad.UP] = snake_up
