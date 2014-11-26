@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 
 from cobra.model import WorldConfig, World, Snake
 from cobra.renderer import CursesRenderer
-from cobra.gamepad import GamePad, CursesGamePad
+from cobra.gamepad import GamePad
 
 
 class Screen(object):
@@ -31,12 +31,6 @@ class BaseScreen(Screen):
     def gamepad(self):
         return self.application.gamepad
 
-
-class CursesScreen(BaseScreen):
-
-    def __init__(self, application):
-        BaseScreen.__init__(self, application)
-
     @property
     def stdscr(self):
         return self.application.stdscr
@@ -46,10 +40,10 @@ class CursesScreen(BaseScreen):
         return self.application.window_size
 
 
-class GameScreen(CursesScreen):
+class GameScreen(BaseScreen):
 
     def __init__(self, application):
-        CursesScreen.__init__(self, application)
+        BaseScreen.__init__(self, application)
 
         self.world = None
         self.renderer = None
@@ -89,15 +83,14 @@ class GameScreen(CursesScreen):
         self._setup_gamepad()
 
     def _setup_gamepad(self):
-        snake = self.world.snake
         def snake_up():
-            snake.direction = Snake.UP
+            self.world.snake.direction = Snake.UP
         def snake_right():
-            snake.direction = Snake.RIGHT
+            self.world.snake.direction = Snake.RIGHT
         def snake_down():
-            snake.direction = Snake.DOWN
+            self.world.snake.direction = Snake.DOWN
         def snake_left():
-            snake.direction = Snake.LEFT
+            self.world.snake.direction = Snake.LEFT
         def pause():
             self._paused = not self._paused
             logger.info("Pause Menu")
