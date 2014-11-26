@@ -4,6 +4,7 @@ import curses
 
 from cobra.screen import GameScreen
 from cobra.screen import Screen as NoScreen
+from cobra.gamepad import CursesGamePad
 
 
 class Cobra(object):
@@ -11,6 +12,7 @@ class Cobra(object):
     def __init__(self):
         self.stdscr = None
         self.window_size = ()
+        self.gamepad = None
 
         self._running = True
         self._error_code = 0
@@ -57,13 +59,25 @@ class Cobra(object):
         sys.exit(self._error_code)
 
     def _setup(self, stdscr, args):
+        self._setup_curses()
+        self._setup_curses_screen(stdscr)
+        self._setup_gamepad(stdscr)
+        self._setup_screen()
+
+        self._last_ticks = time.time()
+
+    def _setup_curses(self):
         curses.resizeterm(24, 80)
         curses.start_color()
         curses.use_default_colors()
         curses.curs_set(False)
 
+    def _setup_curses_screen(self, stdscr):
         self.stdscr = stdscr
         self.window_size = stdscr.getmaxyx()
-        self.screen = GameScreen(self)
 
-        self._last_ticks = time.time()
+    def _setup_gamepad(self, stdscr):
+        self.gamepad = CursesGamePad(stdscr)
+
+    def _setup_screen(self):
+        self.screen = GameScreen(self)

@@ -28,6 +28,16 @@ class BaseScreen(Screen):
         self.application = application
 
     @property
+    def gamepad(self):
+        return self.application.gamepad
+
+
+class CursesScreen(BaseScreen):
+
+    def __init__(self, application):
+        BaseScreen.__init__(self, application)
+
+    @property
     def stdscr(self):
         return self.application.stdscr
 
@@ -36,23 +46,21 @@ class BaseScreen(Screen):
         return self.application.window_size
 
 
-class GameScreen(BaseScreen):
+class GameScreen(CursesScreen):
 
     def __init__(self, application):
-        BaseScreen.__init__(self, application)
+        CursesScreen.__init__(self, application)
 
         self.world = None
         self.renderer = None
-        self.gamepad = None
 
-        self.paused = False
+        self._paused = False
 
         self.create()
 
     def create(self):
         self._create_renderer()
         self._create_world()
-        self._create_gamepad()
 
     def _create_renderer(self):
         self.renderer = CursesRenderer(self.stdscr)
@@ -75,7 +83,12 @@ class GameScreen(BaseScreen):
         snake.listener = self.renderer
         return snake
 
-    def _create_gamepad(self):
+    def show(self):
+        self.stdscr.nodelay(True)
+        self.stdscr.clear()
+        self._setup_gamepad()
+
+    def _setup_gamepad(self):
         snake = self.world.snake
         def snake_up():
             snake.direction = Snake.UP
@@ -86,28 +99,24 @@ class GameScreen(BaseScreen):
         def snake_left():
             snake.direction = Snake.LEFT
         def pause():
-            self.paused = not self.paused
+            self._paused = not self._paused
             logger.info("Pause Menu")
 
-        self.gamepad = CursesGamePad(self.stdscr)
         self.gamepad.commands[GamePad.UP] = snake_up
         self.gamepad.commands[GamePad.RIGHT] = snake_right
         self.gamepad.commands[GamePad.DOWN] = snake_down
         self.gamepad.commands[GamePad.LEFT] = snake_left
         self.gamepad.commands[GamePad.BACK] = pause
 
-    def show(self):
-        self.stdscr.nodelay(True)
-        self.stdscr.clear()
-
     def hide(self):
+        self.gamepad.reset_commands()
         self.stdscr.nodelay(False)
 
     def update(self, delta):
         curses.napms(10)
 
         self.gamepad.input()
-        if not self.paused:
+        if not self._paused:
             self.world.update(delta)
         self.renderer.render()
 
