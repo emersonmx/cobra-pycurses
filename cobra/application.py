@@ -48,17 +48,17 @@ class Cobra(object):
         return delta
 
     def run(self):
-        curses.wrapper(self._run, sys.argv)
+        curses.wrapper(self._run)
 
-    def _run(self, stdscr, args):
-        self._setup(stdscr, args)
+    def _run(self, stdscr):
+        self._setup(stdscr)
 
         while self._running:
             self.update()
 
         sys.exit(self._error_code)
 
-    def _setup(self, stdscr, args):
+    def _setup(self, stdscr):
         self._setup_curses()
         self._setup_curses_screen(stdscr)
         self._setup_gamepad(stdscr)
