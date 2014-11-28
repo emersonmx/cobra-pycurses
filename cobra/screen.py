@@ -71,7 +71,7 @@ class GameScreen(BaseScreen):
 
     def _create_snake(self):
         size = 5
-        x, y = self.window_size[1] / 2, self.window_size[0] / 2
+        x, y = int(self.window_size[1] / 2), int(self.window_size[0] / 2)
         snake = Snake([(x-i, y) for i in range(size)])
         logger.info("Snake body {}".format(str(snake.body)))
         snake.listener = self.renderer
