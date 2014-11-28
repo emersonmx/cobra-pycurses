@@ -200,8 +200,8 @@ class World(object):
 
     def _screen_area_create(self):
         area = []
-        for i in xrange(self.x, self.width + 1):
-            for j in xrange(self.y, self.height + 1):
+        for i in range(self.x, self.width + 1):
+            for j in range(self.y, self.height + 1):
                 area.append((i, j))
 
         return frozenset(area)
