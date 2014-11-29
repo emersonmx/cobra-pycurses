@@ -4,10 +4,13 @@ import curses
 def window_test(stdscr):
     curses.use_default_colors()
     curses.start_color()
-    stdscr.border()
+    curses.resizeterm(24, 80)
 
-    nw = stdscr.subwin(10, 20, 5, 10)
+    nw = stdscr.subwin(1, 0)
     nw.border()
+    nw2 = nw.derwin(1, 1)
+    nw2.border()
+    stdscr.addstr(0, 0, "Score: 10923")
 
     while 1:
         k = stdscr.getch()
@@ -18,6 +21,7 @@ def window_test(stdscr):
 
         stdscr.noutrefresh()
         nw.noutrefresh()
+        nw2.noutrefresh()
         curses.doupdate()
 
 if __name__ == "__main__":
