@@ -7,10 +7,7 @@ from collections import deque
 
 class SnakeListener(object):
 
-    def snake_updated_parts(self, parts):
-        pass
-
-    def snake_removed_parts(self, parts):
+    def snake_body_updated(self, body):
         pass
 
 
@@ -56,7 +53,7 @@ class Snake(object):
     @listener.setter
     def listener(self, listener):
         self._listener = listener
-        self._listener.snake_updated_parts(list(self.body))
+        self._listener.snake_body_updated(self.body)
 
     def eat(self):
         self.body.append(self.tail)
@@ -65,10 +62,9 @@ class Snake(object):
         self._direction = self._input_direction
         head = self._move()
         self.body.appendleft(head)
-        tail = self.body.pop()
+        self.body.pop()
 
-        self.listener.snake_updated_parts([head, self.tail])
-        self.listener.snake_removed_parts([tail])
+        self._listener.snake_body_updated(self.body)
 
     def _move(self):
         x, y = self.head
@@ -83,17 +79,12 @@ class Snake(object):
 
         return (x, y)
 
-    def check_hit_bounds(self, bounds):
-        if self.head[0] < bounds[0]:
-            return True
-        if self.head[0] > bounds[2]:
-            return True
-        if self.head[1] < bounds[1]:
-            return True
-        if self.head[1] > bounds[3]:
-            return True
+    def check_snake_hit_walls(self, bounds):
+        if (bounds[0] <= self.head[0] <= bounds[2] and
+                bounds[1] <= self.head[1] <= bounds[3]):
+            return False
 
-        return False
+        return True
 
     def check_bitten(self):
         if self.body.count(self.head) > 1:
@@ -126,7 +117,7 @@ class WorldListener(object):
 class WorldConfig(object):
 
     def __init__(self):
-        self.bounds = (1, 2, 78, 22)
+        self.bounds = (0, 0, 77, 20)
         self.food_score = 100
 
         self.tick = 0.2
@@ -148,7 +139,7 @@ class World(object):
 
         self._tick_time = 0
 
-        self.listener = WorldListener()
+        self._listener = WorldListener()
 
     @property
     def x(self):
@@ -190,13 +181,21 @@ class World(object):
     def bounds(self, bounds):
         self.config.bounds = bounds
 
+    @property
+    def listener(self):
+        return self._listener
+
+    @listener.setter
+    def listener(self, listener):
+        self._listener = listener
+        self.listener.world_started(self)
+        self.listener.score_updated(self)
+        self.listener.food_created(self)
+
     def create(self):
         self._screen_area = self._screen_area_create()
+        self.snake = self._create_snake()
         self.food = self._create_food()
-
-        self.listener.world_started(self)
-        self.listener.food_created(self)
-        self.listener.score_updated(self)
 
     def _screen_area_create(self):
         area = []
@@ -206,21 +205,19 @@ class World(object):
 
         return frozenset(area)
 
+    def _create_snake(self):
+        size = 5
+        x, y = int(self.width / 2), int(self.height / 2)
+        snake = Snake([(x-i, y) for i in range(size)])
+        logger.info("Snake body {}".format(str(snake.body)))
+        return snake
+
     def _create_food(self):
         food_area = list(self._screen_area.difference(self.snake.body))
         if food_area:
             return choice(food_area)
 
         return ()
-
-    def _inside_bounds(self, point):
-        x, y = point
-        if self.x < x < self.width:
-            return True
-        if self.y < y < self.height:
-            return True
-
-        return False
 
     def update(self, delta):
         if not self.game_over:
@@ -232,15 +229,15 @@ class World(object):
     def _update_world(self, delta):
         self.snake.update()
 
-        self._check_snake_hit_bounds()
+        self._check_snake_hit_walls()
         self._check_snake_bitten()
         self._check_snake_eat_food()
 
         if self.game_over:
             self.listener.world_finished(self)
 
-    def _check_snake_hit_bounds(self):
-        if self.snake.check_hit_bounds(self.bounds):
+    def _check_snake_hit_walls(self):
+        if self.snake.check_snake_hit_walls(self.bounds):
             logger.info("Ouch my head! T.T")
             self.game_over = True
 
@@ -251,7 +248,6 @@ class World(object):
 
     def _check_snake_eat_food(self):
         if self.snake.check_can_eat(self.food):
-            logger.info("I see a yummy food at {} :B".format(self.food))
             self.snake.eat()
 
             self.score += self.config.food_score

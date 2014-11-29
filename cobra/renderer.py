@@ -1,3 +1,4 @@
+import curses
 import logging
 logger = logging.getLogger(__name__)
 
@@ -10,79 +11,57 @@ class Renderer(object):
         pass
 
 
-class CursesUpdateContext(object):
-
-    NO_SCORE = -1
-
-    def __init__(self):
-        self.score = self.NO_SCORE
-        self.food = ()
-        self.bounds = ()
-        self.updated_parts = ()
-        self.removed_parts = ()
-
-
 class CursesRenderer(Renderer, SnakeListener, WorldListener):
 
     def __init__(self, stdscr):
         self.stdscr = stdscr
+        self.game_window = None
 
-        self.context = CursesUpdateContext()
+        self.snake_body = []
+        self.score = 0
+        self.food = ()
 
-    def snake_updated_parts(self, parts):
-        self.context.updated_parts = parts
-
-    def snake_removed_parts(self, parts):
-        self.context.removed_parts = parts
+    def snake_body_updated(self, body):
+        self.snake_body = body
 
     def world_started(self, world):
-        self.context.bounds = world.bounds
-        self.context.score = world.score
-        self.context.food = world.food
+        x, y, width, height = world.bounds
+        self.game_window = self.stdscr.derwin(1, 0)
 
     def world_finished(self, world):
-        self.context.bounds = world.bounds
-        self.context.score = world.score
-        logger.info("DEAD")
+        logger.info("Game Over")
 
     def food_created(self, world):
-        self.context.food = world.food
+        self.food = world.food
+        logger.info("I see a yummy food at {} :B".format(self.food))
 
     def score_updated(self, world):
-        self.context.score = world.score
-        logger.info("Score updated to {}".format(world.score))
+        self.score = world.score
+        logger.info("Score updated to {}".format(self.score))
 
     def render(self):
-        self._render_snake()
-        self._render_bounds()
+        self.stdscr.clear()
         self._render_score()
         self._render_food()
-
-    def _render_snake(self):
-        for x, y in self.context.removed_parts:
-            self.stdscr.addch(y, x, ' ')
-
-        for x, y in self.context.updated_parts:
-            self.stdscr.addch(y, x, '#')
-
-        self.context.updated_parts = ()
-        self.context.removed_parts = ()
-
-    def _render_bounds(self):
-        if self.context.bounds:
-            bounds = self.context.bounds
-            self.stdscr.border('|', '|', ' ', '-', ' ', ' ', '+', '+')
-            top_bar = "+{}+".format('-' * (bounds[2]))
-            self.stdscr.addstr(bounds[1] - 1, 0, top_bar)
-            self.context.bounds = ()
+        self._render_snake_body()
+        self._render_game_window_border()
+        self._update_screen()
 
     def _render_score(self):
-        if self.context.score != CursesUpdateContext.NO_SCORE:
-            self.stdscr.addstr(0, 0, "Score: {}".format(self.context.score))
-            self.context.score = CursesUpdateContext.NO_SCORE
+        self.stdscr.addstr(0, 0, "Score: {}".format(self.score))
 
     def _render_food(self):
-        if self.context.food:
-            x, y = self.context.food
-            self.stdscr.addch(y, x, '*')
-            self.context.food = ()
+        x, y = self.food
+        self.game_window.addch(y + 1, x + 1, '*')
+
+    def _render_snake_body(self):
+        for x, y in self.snake_body:
+            self.game_window.addch(y + 1, x + 1, '#')
+
+    def _render_game_window_border(self):
+        self.game_window.border()
+
+    def _update_screen(self):
+        self.stdscr.noutrefresh()
+        self.game_window.noutrefresh()
+        curses.doupdate()

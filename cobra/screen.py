@@ -53,29 +53,21 @@ class GameScreen(BaseScreen):
         self.create()
 
     def create(self):
-        self._create_renderer()
         self._create_world()
-
-    def _create_renderer(self):
-        self.renderer = CursesRenderer(self.stdscr)
+        self._create_renderer()
 
     def _create_world(self):
         config = self._create_world_config()
         self.world = World(config)
-        self.world.snake = self._create_snake()
-        self.world.listener = self.renderer
         self.world.create()
 
     def _create_world_config(self):
         return WorldConfig()
 
-    def _create_snake(self):
-        size = 5
-        x, y = int(self.window_size[1] / 2), int(self.window_size[0] / 2)
-        snake = Snake([(x-i, y) for i in range(size)])
-        logger.info("Snake body {}".format(str(snake.body)))
-        snake.listener = self.renderer
-        return snake
+    def _create_renderer(self):
+        self.renderer = CursesRenderer(self.stdscr)
+        self.world.listener = self.renderer
+        self.world.snake.listener = self.renderer
 
     def show(self):
         self.stdscr.nodelay(True)
@@ -119,7 +111,6 @@ class GameScreen(BaseScreen):
 
     def render(self):
         self.renderer.render()
-        self.stdscr.refresh()
 
 
 class GamePauseScreen(BaseScreen):
