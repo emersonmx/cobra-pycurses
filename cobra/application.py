@@ -1,4 +1,3 @@
-import sys
 import time
 import curses
 
@@ -49,14 +48,13 @@ class Cobra(object):
 
     def run(self):
         curses.wrapper(self._run)
+        return self._error_code
 
     def _run(self, stdscr):
         self._setup(stdscr)
 
         while self._running:
             self.update()
-
-        sys.exit(self._error_code)
 
     def _setup(self, stdscr):
         self._setup_curses()

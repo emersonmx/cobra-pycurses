@@ -1,3 +1,5 @@
+import sys
+
 from cobra.application import Cobra
 
 def setup_logger():
@@ -8,7 +10,7 @@ def main():
     setup_logger()
 
     application = Cobra()
-    application.run()
+    sys.exit(application.run())
 
 if __name__ == "__main__":
     main()
