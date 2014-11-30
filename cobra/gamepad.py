@@ -16,19 +16,21 @@ class GamePad(object):
         pass
 
     def __init__(self):
-        self.buttons = {}
-        self.commands = {}
-        self.reset_commands()
+        self.buttons = self.create_buttons()
+        self.commands = self._create_commands()
+
+    def create_buttons(self):
+        number_of_buttons = bin(self.ALL_BUTTONS).count('1')
+        buttons = [1 << i for i in range(number_of_buttons)]
+        return {button: set() for button in buttons}
+
+    def _create_commands(self):
+        number_of_buttons = bin(self.ALL_BUTTONS).count('1')
+        commands = [1 << i for i in range(number_of_buttons)]
+        return {command: self.no_command for command in commands}
 
     def reset_commands(self):
-        self.commands = {
-            self.UP: self.no_command,
-            self.RIGHT: self.no_command,
-            self.DOWN: self.no_command,
-            self.LEFT: self.no_command,
-            self.ENTER: self.no_command,
-            self.BACK: self.no_command,
-        }
+        self.commands = self._create_commands()
 
     def process_input(self):
         pass
@@ -40,7 +42,9 @@ class CursesGamePad(GamePad):
         GamePad.__init__(self)
 
         self.stdscr = stdscr
-        self.buttons = {
+
+    def create_buttons(self):
+        return {
             self.UP: set([curses.KEY_UP, ord('k')]),
             self.RIGHT: set([curses.KEY_RIGHT, ord('l')]),
             self.DOWN: set([curses.KEY_DOWN, ord('j')]),
