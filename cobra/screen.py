@@ -96,7 +96,6 @@ class GameScreen(BaseScreen, SnakeListener, WorldListener):
 
     def show(self):
         self.stdscr.nodelay(True)
-        self.stdscr.clear()
         self._setup_gamepad()
 
     def _setup_gamepad(self):
