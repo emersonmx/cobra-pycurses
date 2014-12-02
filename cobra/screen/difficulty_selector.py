@@ -48,19 +48,39 @@ class DifficultySelectorScreen(CursesScreen):
 
     def create_easy_game(self):
         wait_screen = WaitGameScreen(self.application)
+        world_config = self.create_easy_world()
         return wait_screen
+
+    def create_easy_world(self):
+        world_config = WorldConfig()
+        return world_config
 
     def create_normal_game(self):
         wait_screen = WaitGameScreen(self.application)
+        world_config = self.create_normal_world()
         return wait_screen
+
+    def create_normal_world(self):
+        world_config = WorldConfig()
+        return world_config
 
     def create_hard_game(self):
         wait_screen = WaitGameScreen(self.application)
+        world_config = self.create_hard_world()
         return wait_screen
+
+    def create_hard_world(self):
+        world_config = WorldConfig()
+        return world_config
 
     def create_very_hard_game(self):
         wait_screen = WaitGameScreen(self.application)
+        world_config = self.create_very_hard_world()
         return wait_screen
+
+    def create_very_hard_world(self):
+        world_config = WorldConfig()
+        return world_config
 
     def update(self, delta):
         sleep()
@@ -86,3 +106,4 @@ class DifficultySelectorScreen(CursesScreen):
             self.stdscr.addstr(y+i, x, option, attribute)
 
 from cobra.screen.wait import WaitGameScreen
+from combra.model import WorldConfig
