@@ -74,7 +74,7 @@ class GameScreen(CursesScreen, SnakeListener, WorldListener):
         self.gamepad.process_input()
 
     def render(self):
-        self.stdscr.clear()
+        self.stdscr.erase()
         self.render_screen()
         self.update_screen()
 

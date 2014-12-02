@@ -90,7 +90,7 @@ class DifficultySelectorScreen(CursesScreen):
         self.render()
 
     def render(self):
-        self.stdscr.clear()
+        self.stdscr.erase()
         self.menu_screen.render_logo()
         self.render_difficulty_options()
         self.stdscr.refresh()

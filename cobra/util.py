@@ -1,4 +1,4 @@
 import curses
 
 def sleep():
-    curses.napms(16)
+    curses.napms(5)

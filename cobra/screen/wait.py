@@ -44,7 +44,7 @@ class WaitGameScreen(CursesScreen):
         sleep()
         self.gamepad.process_input()
 
-        self.stdscr.clear()
+        self.stdscr.erase()
         self.game_screen.render_screen()
         self.render_message_window()
         curses.doupdate()
@@ -53,7 +53,7 @@ class WaitGameScreen(CursesScreen):
         height, width = self.message_window.getmaxyx()
         x = int(width / 2 - len(self.message) / 2)
         y = int(height / 2)
-        self.message_window.clear()
+        self.message_window.erase()
         self.message_window.border()
         self.message_window.addstr(y, x, self.message)
         self.message_window.noutrefresh()

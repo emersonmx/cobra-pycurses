@@ -79,7 +79,7 @@ class MenuScreen(CursesScreen):
         self.render()
 
     def render(self):
-        self.stdscr.clear()
+        self.stdscr.erase()
         self.render_logo()
         self.render_menu()
         self.stdscr.refresh()
