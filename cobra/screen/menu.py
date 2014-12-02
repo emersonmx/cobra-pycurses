@@ -53,19 +53,24 @@ class MenuScreen(CursesScreen):
             self.option += 1
             if self.option > self.QUIT:
                 self.option = self.QUIT
+        def back():
+            self.application.exit()
         def enter():
             if self.option == self.START_GAME:
+                self.application.screen = (
+                    DifficultySelectorScreen(self.application, self))
                 logger.info("Start game")
             elif self.option == self.HOW_TO:
                 logger.info("How-To")
             elif self.option == self.HISCORES:
                 logger.info("High scores")
             elif self.option == self.QUIT:
-                self.application.exit()
+                back()
 
         self.gamepad.commands[GamePad.UP] = up
         self.gamepad.commands[GamePad.DOWN] = down
         self.gamepad.commands[GamePad.ENTER] = enter
+        self.gamepad.commands[GamePad.BACK] = back
 
     def update(self, delta):
         sleep()
@@ -75,7 +80,6 @@ class MenuScreen(CursesScreen):
 
     def render(self):
         self.stdscr.clear()
-        self.stdscr.border()
         self.render_logo()
         self.render_menu()
         self.stdscr.refresh()
@@ -97,3 +101,5 @@ class MenuScreen(CursesScreen):
                 attribute = curses.A_BOLD
             x = int(width / 2 - len(option) / 2)
             self.stdscr.addstr(y+i, x, option, attribute)
+
+from cobra.screen.difficulty_selector import DifficultySelectorScreen

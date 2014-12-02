@@ -7,13 +7,44 @@ from cobra.util import sleep
 
 class DifficultySelectorScreen(CursesScreen):
 
+    EASY = 0
+    NORMAL = 1
+    HARD = 2
+    VERY_HARD = 3
+
     def __init__(self, application, menu_screen):
         CursesScreen.__init__(self, application)
 
         self.menu_screen = menu_screen
 
+        self.difficulty_options = ["Easy", "Normal", "Hard", "Very Hard"]
+        self.option = self.EASY
+
     def setup_gamepad(self):
-        pass
+        def up():
+            self.option -= 1
+            if self.option < self.EASY:
+                self.option = self.EASY
+        def down():
+            self.option += 1
+            if self.option > self.VERY_HARD:
+                self.option = self.VERY_HARD
+        def enter():
+            if self.option == self.EASY:
+                pass
+            elif self.option == self.NORMAL:
+                pass
+            elif self.option == self.HARD:
+                pass
+            elif self.option == self.VERY_HARD:
+                pass
+        def back():
+            self.application.screen = self.menu_screen
+
+        self.gamepad.commands[GamePad.UP] = up
+        self.gamepad.commands[GamePad.DOWN] = down
+        self.gamepad.commands[GamePad.ENTER] = enter
+        self.gamepad.commands[GamePad.BACK] = back
 
     def update(self, delta):
         sleep()
@@ -23,4 +54,17 @@ class DifficultySelectorScreen(CursesScreen):
 
     def render(self):
         self.stdscr.clear()
+        self.menu_screen.render_logo()
+        self.render_difficulty_options()
         self.stdscr.refresh()
+
+    def render_difficulty_options(self):
+        height, width = self.window_size
+        padding = 2
+        y = height - len(self.difficulty_options) - padding
+        for i, option in enumerate(self.difficulty_options):
+            attribute = curses.A_NORMAL
+            if i == self.option:
+                attribute = curses.A_BOLD
+            x = int(width / 2 - len(option) / 2)
+            self.stdscr.addstr(y+i, x, option, attribute)
