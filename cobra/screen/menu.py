@@ -18,7 +18,7 @@ class MenuScreen(CursesScreen):
         CursesScreen.__init__(self, application)
 
         self.logo = []
-        self.menu_options = ["Start Game", "How-To", "High Scores", "Quit"]
+        self.menu_options = ["Start", "How-To", "High Scores", "Quit"]
         self.option = self.START_GAME
 
         self.create()
@@ -67,13 +67,13 @@ class MenuScreen(CursesScreen):
         self.gamepad.commands[GamePad.DOWN] = down
         self.gamepad.commands[GamePad.ENTER] = enter
 
-    def dispose(self):
-        pass
-
     def update(self, delta):
         sleep()
         self.gamepad.process_input()
 
+        self._render()
+
+    def _render(self):
         self.stdscr.clear()
         self.stdscr.border()
         self._render_logo()
