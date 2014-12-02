@@ -1,7 +1,7 @@
 import time
 import curses
 
-from cobra.screen import GameScreen
+from cobra.screen import GameScreen, WaitGameScreen
 from cobra.screen import Screen as NoScreen
 from cobra.gamepad import CursesGamePad
 
@@ -73,9 +73,10 @@ class Cobra(object):
     def _setup_curses_screen(self, stdscr):
         self.stdscr = stdscr
         self.window_size = stdscr.getmaxyx()
+        self.stdscr.nodelay(True)
 
     def _setup_gamepad(self, stdscr):
         self.gamepad = CursesGamePad(stdscr)
 
     def _setup_screen(self):
-        self.screen = GameScreen(self)
+        self.screen = WaitGameScreen(self)
