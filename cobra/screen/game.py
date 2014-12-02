@@ -4,8 +4,8 @@ logger = logging.getLogger(__name__)
 
 from cobra.gamepad import GamePad
 from cobra.screen.curses import CursesScreen
-from cobra.model import World, WorldConfig, Snake
-from cobra.model import WorldListener, SnakeListener
+from cobra.model.world import World, WorldConfig, WorldListener
+from cobra.model.snake import Snake, SnakeListener
 from cobra.util import sleep
 
 
