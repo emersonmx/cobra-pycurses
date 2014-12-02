@@ -31,13 +31,13 @@ class DifficultySelectorScreen(CursesScreen):
                 self.option = self.VERY_HARD
         def enter():
             if self.option == self.EASY:
-                pass
+                self.application.screen = self.create_easy_game()
             elif self.option == self.NORMAL:
-                pass
+                self.application.screen = self.create_normal_game()
             elif self.option == self.HARD:
-                pass
+                self.application.screen = self.create_hard_game()
             elif self.option == self.VERY_HARD:
-                pass
+                self.application.screen = self.create_very_hard_game()
         def back():
             self.application.screen = self.menu_screen
 
@@ -45,6 +45,22 @@ class DifficultySelectorScreen(CursesScreen):
         self.gamepad.commands[GamePad.DOWN] = down
         self.gamepad.commands[GamePad.ENTER] = enter
         self.gamepad.commands[GamePad.BACK] = back
+
+    def create_easy_game(self):
+        wait_screen = WaitGameScreen(self.application)
+        return wait_screen
+
+    def create_normal_game(self):
+        wait_screen = WaitGameScreen(self.application)
+        return wait_screen
+
+    def create_hard_game(self):
+        wait_screen = WaitGameScreen(self.application)
+        return wait_screen
+
+    def create_very_hard_game(self):
+        wait_screen = WaitGameScreen(self.application)
+        return wait_screen
 
     def update(self, delta):
         sleep()
@@ -68,3 +84,5 @@ class DifficultySelectorScreen(CursesScreen):
                 attribute = curses.A_BOLD
             x = int(width / 2 - len(option) / 2)
             self.stdscr.addstr(y+i, x, option, attribute)
+
+from cobra.screen.wait import WaitGameScreen
