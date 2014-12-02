@@ -1,0 +1,6 @@
+{
+    "easy": [('Norman', 58200), ('Bruna', 58600), ('Tamekia', 76800), ('Verline', 86600), ('Vincenta', 89600), ('Ivy', 93100), ('Trish', 104700), ('Zackary', 109600), ('Caren', 122200), ('Mafalda', 147800)],
+    "normal": [('Keenan', 4300), ('Viviana', 22500), ('Zula', 40700), ('Mildred', 52400), ('Toni', 103800), ('Roxann', 107200), ('Milan', 117200), ('Joan', 132700), ('Lucien', 136200), ('Ethan', 138900)],
+    "hard": [('Cedrick', 10600), ('Maple', 21300), ('Randy', 25900), ('Toya', 39000), ('Desmond', 47200), ('Myron', 61900), ('Bess', 123200), ('Gustavo', 137000), ('Hoa', 142500), ('Emmett', 149100)],
+    "very_hard": [('Daron', 6600), ('Donya', 49000), ('Leonarda', 62600), ('Ted', 65600), ('Eugenie', 78200), ('Randy', 78400), ('Michele', 82300), ('Akilah', 98900), ('Trudi', 129300), ('Necole', 135300)]
+}
