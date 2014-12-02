@@ -4,7 +4,6 @@ logger = logging.getLogger(__name__)
 
 from cobra.gamepad import GamePad
 from cobra.screen import CursesScreen
-from cobra.screen import GamePauseScreen
 from cobra.model import World, WorldConfig, Snake
 from cobra.model import WorldListener, SnakeListener
 from cobra.util import sleep
@@ -124,3 +123,5 @@ class GameScreen(CursesScreen, SnakeListener, WorldListener):
     def score_updated(self, world):
         self.score = world.score
         logger.info("Score updated to {}".format(self.score))
+
+from cobra.screen.game_pause import GamePauseScreen

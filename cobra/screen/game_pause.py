@@ -46,16 +46,15 @@ class GamePauseScreen(CursesScreen):
             self.option += 1
             if self.option > self.BACK_TO_MENU:
                 self.option = self.BACK_TO_MENU
-        def enter():
-            if self.option == self.RESUME_GAME:
-                self.application.screen = self.game_screen
-                logger.info("Resume game")
-            elif self.option == self.RETRY:
-                pass
-            elif self.option == self.BACK_TO_MENU:
-                pass
         def back():
             self.application.screen = self.game_screen
+        def enter():
+            if self.option == self.RESUME_GAME:
+                back()
+            elif self.option == self.RETRY:
+                self.application.screen = WaitGameScreen(self.application)
+            elif self.option == self.BACK_TO_MENU:
+                pass
 
         self.gamepad.commands[GamePad.UP] = up
         self.gamepad.commands[GamePad.DOWN] = down
@@ -89,3 +88,5 @@ class GamePauseScreen(CursesScreen):
             self.pause_window.addstr(i+1, x, option, attribute)
 
         self.pause_window.noutrefresh()
+
+from cobra.screen.wait import WaitGameScreen

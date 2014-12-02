@@ -2,7 +2,7 @@ import curses
 
 from cobra.gamepad import GamePad
 from cobra.screen import CursesScreen
-from cobra.screen import GameScreen
+from cobra.screen.game import GameScreen
 from cobra.util import sleep
 
 
