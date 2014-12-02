@@ -33,11 +33,7 @@ class GamePauseScreen(CursesScreen):
         y = int(self.window_size[0] / 2 - height / 2)
         self.pause_window = self.stdscr.derwin(height, width, y, x)
 
-    def show(self):
-        self.gamepad.reset_commands()
-        self._setup_gamepad()
-
-    def _setup_gamepad(self):
+    def setup_gamepad(self):
         def up():
             self.option -= 1
             if self.option < self.RESUME_GAME:

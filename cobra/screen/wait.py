@@ -32,11 +32,7 @@ class WaitGameScreen(CursesScreen):
     def _create_game_screen(self):
         self.game_screen = GameScreen(self.application)
 
-    def show(self):
-        self.gamepad.reset_commands()
-        self._setup_gamepad()
-
-    def _setup_gamepad(self):
+    def setup_gamepad(self):
         def start_game():
             self.application.screen = self.game_screen
 

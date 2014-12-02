@@ -10,10 +10,7 @@ class MenuScreen(CursesScreen):
     def __init__(self, application):
         CursesScreen.__init__(self, application)
 
-    def show(self):
-        pass
-
-    def hide(self):
+    def setup_gamepad(self):
         pass
 
     def dispose(self):

@@ -43,11 +43,7 @@ class GameScreen(CursesScreen, SnakeListener, WorldListener):
     def _create_game_window(self):
         self.game_window = self.stdscr.derwin(1, 0)
 
-    def show(self):
-        self.gamepad.reset_commands()
-        self._setup_gamepad()
-
-    def _setup_gamepad(self):
+    def setup_gamepad(self):
         def snake_up():
             self.world.snake.direction = Snake.UP
         def snake_right():

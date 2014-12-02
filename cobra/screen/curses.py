@@ -17,3 +17,10 @@ class CursesScreen(Screen):
     @property
     def window_size(self):
         return self.application.window_size
+
+    def show(self):
+        self.gamepad.reset_commands()
+        self.setup_gamepad()
+
+    def setup_gamepad(self):
+        pass
