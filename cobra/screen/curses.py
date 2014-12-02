@@ -1,4 +1,4 @@
-from cobra.screen import Screen
+from cobra.screen.base import Screen
 
 
 class CursesScreen(Screen):

@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from cobra.gamepad import GamePad
-from cobra.screen import CursesScreen
+from cobra.screen.curses import CursesScreen
 from cobra.util import sleep
 
 
