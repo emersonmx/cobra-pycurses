@@ -2,7 +2,6 @@ import curses
 
 from cobra.gamepad import GamePad
 from cobra.screen import CursesScreen
-from cobra.screen.game import GameScreen
 from cobra.util import sleep
 
 
@@ -18,10 +17,10 @@ class WaitGameScreen(CursesScreen):
         self.create()
 
     def create(self):
-        self._create_message_window()
-        self._create_game_screen()
+        self.create_message_window()
+        self.create_game_screen()
 
-    def _create_message_window(self):
+    def create_message_window(self):
         padding = 3
         width = len(self.message) + 2 * padding
         height = 3
@@ -29,7 +28,7 @@ class WaitGameScreen(CursesScreen):
         y = int(self.window_size[0] / 3 - height / 2)
         self.message_window = self.stdscr.derwin(height, width, y, x)
 
-    def _create_game_screen(self):
+    def create_game_screen(self):
         self.game_screen = GameScreen(self.application)
 
     def setup_gamepad(self):
@@ -47,10 +46,10 @@ class WaitGameScreen(CursesScreen):
 
         self.stdscr.clear()
         self.game_screen.render_screen()
-        self._render_message_window()
+        self.render_message_window()
         curses.doupdate()
 
-    def _render_message_window(self):
+    def render_message_window(self):
         height, width = self.message_window.getmaxyx()
         x = int(width / 2 - len(self.message) / 2)
         y = int(height / 2)
@@ -58,3 +57,5 @@ class WaitGameScreen(CursesScreen):
         self.message_window.border()
         self.message_window.addstr(y, x, self.message)
         self.message_window.noutrefresh()
+
+from cobra.screen.game import GameScreen

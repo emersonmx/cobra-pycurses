@@ -24,23 +24,23 @@ class GameScreen(CursesScreen, SnakeListener, WorldListener):
         self.create()
 
     def create(self):
-        self._create_world()
-        self._setup_listener()
-        self._create_game_window()
+        self.create_world()
+        self.setup_listener()
+        self.create_game_window()
 
-    def _create_world(self):
-        config = self._create_world_config()
+    def create_world(self):
+        config = self.create_world_config()
         self.world = World(config)
         self.world.create()
 
-    def _create_world_config(self):
+    def create_world_config(self):
         return WorldConfig()
 
-    def _setup_listener(self):
+    def setup_listener(self):
         self.world.listener = self
         self.world.snake.listener = self
 
-    def _create_game_window(self):
+    def create_game_window(self):
         self.game_window = self.stdscr.derwin(1, 0)
 
     def setup_gamepad(self):
@@ -68,37 +68,37 @@ class GameScreen(CursesScreen, SnakeListener, WorldListener):
         self.process_input()
         self.world.update(delta)
 
-        self._render()
+        self.render()
 
     def process_input(self):
         self.gamepad.process_input()
 
-    def _render(self):
+    def render(self):
         self.stdscr.clear()
         self.render_screen()
-        self._update_screen()
+        self.update_screen()
 
     def render_screen(self):
-        self._render_score()
-        self._render_food()
-        self._render_snake_body()
-        self._render_game_window_border()
+        self.render_score()
+        self.render_food()
+        self.render_snake_body()
+        self.render_game_window_border()
 
-    def _render_score(self):
+    def render_score(self):
         self.stdscr.addstr(0, 0, "Score: {}".format(self.score))
 
-    def _render_food(self):
+    def render_food(self):
         x, y = self.food
         self.game_window.addch(y + 1, x + 1, '*')
 
-    def _render_snake_body(self):
+    def render_snake_body(self):
         for x, y in self.snake_body:
             self.game_window.addch(y + 1, x + 1, '#')
 
-    def _render_game_window_border(self):
+    def render_game_window_border(self):
         self.game_window.border()
 
-    def _update_screen(self):
+    def update_screen(self):
         self.stdscr.noutrefresh()
         self.game_window.noutrefresh()
         curses.doupdate()

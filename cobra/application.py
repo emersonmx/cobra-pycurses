@@ -13,9 +13,9 @@ class Cobra(object):
         self.window_size = ()
         self.gamepad = None
 
-        self._running = True
-        self._error_code = 0
-        self._last_ticks = 0
+        self.running = True
+        self.error_code = 0
+        self.last_ticks = 0
 
         self._screen = NoScreen()
 
@@ -30,53 +30,53 @@ class Cobra(object):
         self._screen.show()
 
     def exit(self, error_code=0):
-        self._error_code = error_code
-        self._running = False
+        self.error_code = error_code
+        self.running = False
 
     def dispose(self):
         self.screen.dispose()
 
     def update(self):
-        self.screen.update(self._delta_time())
+        self.screen.update(self.delta_time())
 
-    def _delta_time(self):
+    def delta_time(self):
         ticks = time.time()
-        delta = ticks - self._last_ticks
-        self._last_ticks = ticks
+        delta = ticks - self.last_ticks
+        self.last_ticks = ticks
 
         return delta
 
     def run(self):
         curses.wrapper(self._run)
-        return self._error_code
+        return self.error_code
 
     def _run(self, stdscr):
-        self._setup(stdscr)
+        self.setup(stdscr)
 
-        while self._running:
+        while self.running:
             self.update()
 
-    def _setup(self, stdscr):
-        self._setup_curses()
-        self._setup_curses_screen(stdscr)
-        self._setup_gamepad(stdscr)
-        self._setup_screen()
+    def setup(self, stdscr):
+        self.setup_curses()
+        self.setup_curses_screen(stdscr)
+        self.setup_gamepad(stdscr)
+        self.setup_screen()
 
-        self._last_ticks = time.time()
+        self.last_ticks = time.time()
 
-    def _setup_curses(self):
+    def setup_curses(self):
         curses.resizeterm(24, 80)
         curses.start_color()
         curses.use_default_colors()
         curses.curs_set(False)
 
-    def _setup_curses_screen(self, stdscr):
+    def setup_curses_screen(self, stdscr):
         self.stdscr = stdscr
         self.window_size = stdscr.getmaxyx()
         self.stdscr.nodelay(True)
 
-    def _setup_gamepad(self, stdscr):
+    def setup_gamepad(self, stdscr):
         self.gamepad = CursesGamePad(stdscr)
 
-    def _setup_screen(self):
+    def setup_screen(self):
         self.screen = MenuScreen(self)

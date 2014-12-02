@@ -24,9 +24,9 @@ class GamePauseScreen(CursesScreen):
         self.create()
 
     def create(self):
-        self._create_pause_window()
+        self.create_pause_window()
 
-    def _create_pause_window(self):
+    def create_pause_window(self):
         width = 20
         height = len(self.options) + 2
         x = int(self.window_size[1] / 2 - width / 2)
@@ -63,10 +63,10 @@ class GamePauseScreen(CursesScreen):
 
         self.stdscr.clear()
         self.game_screen.render_screen()
-        self._render_pause_window()
+        self.render_pause_window()
         curses.doupdate()
 
-    def _render_pause_window(self):
+    def render_pause_window(self):
         self.pause_window.clear()
         self.pause_window.border()
         height, width = self.pause_window.getmaxyx()

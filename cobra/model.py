@@ -40,10 +40,10 @@ class Snake(object):
 
     @direction.setter
     def direction(self, direction):
-        if self._can_turn(direction):
+        if self.can_turn(direction):
             self._input_direction = direction
 
-    def _can_turn(self, direction):
+    def can_turn(self, direction):
         return ((direction + self._direction) % 2) == 1
 
     @property
@@ -60,13 +60,13 @@ class Snake(object):
 
     def update(self):
         self._direction = self._input_direction
-        head = self._move()
+        head = self.move()
         self.body.appendleft(head)
         self.body.pop()
 
         self._listener.snake_body_updated(self.body)
 
-    def _move(self):
+    def move(self):
         x, y = self.head
         if self.direction == self.UP:
             y -= 1
@@ -193,11 +193,11 @@ class World(object):
         self.listener.food_created(self)
 
     def create(self):
-        self._screen_area = self._screen_area_create()
-        self.snake = self._create_snake()
-        self.food = self._create_food()
+        self._screen_area = self.screen_area_create()
+        self.snake = self.create_snake()
+        self.food = self.create_food()
 
-    def _screen_area_create(self):
+    def screen_area_create(self):
         area = []
         for i in range(self.x, self.width + 1):
             for j in range(self.y, self.height + 1):
@@ -205,14 +205,14 @@ class World(object):
 
         return frozenset(area)
 
-    def _create_snake(self):
+    def create_snake(self):
         size = 5
         x, y = int(self.width / 2), int(self.height / 2)
         snake = Snake([(x-i, y) for i in range(size)])
         logger.info("Snake body {}".format(str(snake.body)))
         return snake
 
-    def _create_food(self):
+    def create_food(self):
         food_area = list(self._screen_area.difference(self.snake.body))
         if food_area:
             return choice(food_area)
@@ -224,39 +224,39 @@ class World(object):
             self._tick_time += delta
             while self._tick_time > self.config.tick:
                 self._tick_time -= self.config.tick
-                self._update_world(delta)
+                self.update_world(delta)
 
-    def _update_world(self, delta):
+    def update_world(self, delta):
         self.snake.update()
 
-        self._check_snake_hit_walls()
-        self._check_snake_bitten()
-        self._check_snake_eat_food()
+        self.check_snake_hit_walls()
+        self.check_snake_bitten()
+        self.check_snake_eat_food()
 
         if self.game_over:
             self.listener.world_finished(self)
 
-    def _check_snake_hit_walls(self):
+    def check_snake_hit_walls(self):
         if self.snake.check_snake_hit_walls(self.bounds):
             logger.info("Ouch my head! T.T")
             self.game_over = True
 
-    def _check_snake_bitten(self):
+    def check_snake_bitten(self):
         if self.snake.check_bitten():
             logger.info("I'm a oroboros! Yay :D")
             self.game_over = True
 
-    def _check_snake_eat_food(self):
+    def check_snake_eat_food(self):
         if self.snake.check_can_eat(self.food):
             self.snake.eat()
 
             self.score += self.config.food_score
             self.listener.score_updated(self)
 
-            self.food = self._create_food()
+            self.food = self.create_food()
             if self.food:
                 if self.score % self.config.speed_boost_at_score == 0:
-                    self._increase_snake_speed()
+                    self.increase_snake_speed()
 
                 self.listener.food_created(self)
             else:
@@ -264,10 +264,7 @@ class World(object):
                     len(self.snake.body)))
                 self.game_over = True
 
-    def _bounds_area(self):
-        return (self.width - self.x) * (self.height - self.y)
-
-    def _increase_snake_speed(self):
+    def increase_snake_speed(self):
         decrement = self.config.tick * self.config.tick_decrement_ratio
         if self.config.tick - decrement > 0:
             self.config.tick -= decrement

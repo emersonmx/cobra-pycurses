@@ -24,9 +24,9 @@ class MenuScreen(CursesScreen):
         self.create()
 
     def create(self):
-        self._create_logo()
+        self.create_logo()
 
-    def _create_logo(self):
+    def create_logo(self):
         self.logo = [
             " ##############                                                             ",
             "################                                                            ",
@@ -71,23 +71,23 @@ class MenuScreen(CursesScreen):
         sleep()
         self.gamepad.process_input()
 
-        self._render()
+        self.render()
 
-    def _render(self):
+    def render(self):
         self.stdscr.clear()
         self.stdscr.border()
-        self._render_logo()
-        self._render_menu()
+        self.render_logo()
+        self.render_menu()
         self.stdscr.refresh()
 
-    def _render_logo(self):
+    def render_logo(self):
         height, width = self.window_size
         y = 2
         for i, line in enumerate(self.logo):
             x = int(width / 2 - len(line) / 2)
             self.stdscr.addstr(y+i, x, line)
 
-    def _render_menu(self):
+    def render_menu(self):
         height, width = self.window_size
         padding = 2
         y = height - len(self.menu_options) - padding
