@@ -1,7 +1,8 @@
 import time
 import curses
 
-from cobra.screen import GameScreen, WaitGameScreen
+from cobra.screen.game import GameScreen
+from cobra.screen.wait import WaitGameScreen
 from cobra.screen import Screen as NoScreen
 from cobra.gamepad import CursesGamePad
 
