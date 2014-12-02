@@ -48,7 +48,10 @@ class GamePauseScreen(CursesScreen):
             if self.option == self.RESUME_GAME:
                 back()
             elif self.option == self.RETRY:
-                self.application.screen = WaitGameScreen(self.application)
+                wait_screen = WaitGameScreen(self.application)
+                world_config = self.game_screen.world.config
+                wait_screen.game_screen.world.config = world_config
+                self.application.screen = wait_screen
             elif self.option == self.BACK_TO_MENU:
                 self.application.screen = MenuScreen(self.application)
 
