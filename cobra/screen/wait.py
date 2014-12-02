@@ -55,9 +55,10 @@ class WaitGameScreen(CursesScreen):
         curses.doupdate()
 
     def _render_message_window(self):
-        self.message_window.border()
         height, width = self.message_window.getmaxyx()
         x = int(width / 2 - len(self.message) / 2)
         y = int(height / 2)
+        self.message_window.clear()
+        self.message_window.border()
         self.message_window.addstr(y, x, self.message)
         self.message_window.noutrefresh()
