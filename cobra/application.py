@@ -1,8 +1,7 @@
 import time
 import curses
 
-from cobra.screen.game import GameScreen
-from cobra.screen.wait import WaitGameScreen
+from cobra.screen.menu import MenuScreen
 from cobra.screen import Screen as NoScreen
 from cobra.gamepad import CursesGamePad
 
@@ -80,4 +79,4 @@ class Cobra(object):
         self.gamepad = CursesGamePad(stdscr)
 
     def _setup_screen(self):
-        self.screen = WaitGameScreen(self)
+        self.screen = MenuScreen(self)
