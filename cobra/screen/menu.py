@@ -83,7 +83,7 @@ class MenuScreen(CursesScreen):
         self.stdscr.refresh()
 
     def render_logo(self):
-        height, width = self.window_size
+        width = self.window_size[1]
         y = 2
         for i, line in enumerate(self.logo):
             x = int(width / 2 - len(line) / 2)

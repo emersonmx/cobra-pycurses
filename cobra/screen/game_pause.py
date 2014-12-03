@@ -70,7 +70,7 @@ class GamePauseScreen(CursesScreen):
     def render_pause_window(self):
         self.pause_window.erase()
         self.pause_window.border()
-        height, width = self.pause_window.getmaxyx()
+        width = self.pause_window.getmaxyx()[1]
         for i, option in enumerate(self.options):
             attribute = curses.A_NORMAL
             if i == self.option:

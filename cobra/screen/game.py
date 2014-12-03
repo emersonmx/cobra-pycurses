@@ -18,7 +18,7 @@ class GameScreen(CursesScreen, SnakeListener, WorldListener):
 
         self.snake_body = []
         self.score = 0
-        self.food = ()
+        self.food = (0, 0)
 
         self.create()
 
@@ -102,9 +102,6 @@ class GameScreen(CursesScreen, SnakeListener, WorldListener):
 
     def snake_body_updated(self, body):
         self.snake_body = body
-
-    def world_started(self, world):
-        x, y, width, height = world.bounds
 
     def world_finished(self, world):
         logger.info("Game Over")

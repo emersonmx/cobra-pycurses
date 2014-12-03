@@ -1,9 +1,10 @@
+import time
 import curses
 
 from cobra.screen.menu import MenuScreen
 from cobra.screen.base import Screen as NoScreen
 from cobra.gamepad import CursesGamePad
-from cobra.util import *
+from cobra.util import delay
 
 
 class Application(object):

@@ -37,14 +37,14 @@ class World(object):
     def __init__(self, config):
         self.config = config
 
-        self._screen_area = ()
+        self.screen_area = ()
         self.game_over = False
 
         self.snake = None
         self.food = ()
         self.score = 0
 
-        self._tick_time = 0
+        self.tick_time = 0
 
         self._listener = WorldListener()
 
@@ -100,7 +100,7 @@ class World(object):
         self.listener.food_created(self)
 
     def create(self):
-        self._screen_area = self.screen_area_create()
+        self.screen_area = self.screen_area_create()
         self.snake = self.create_snake()
         self.food = self.create_food()
 
@@ -120,7 +120,7 @@ class World(object):
         return snake
 
     def create_food(self):
-        food_area = list(self._screen_area.difference(self.snake.body))
+        food_area = list(self.screen_area.difference(self.snake.body))
         if food_area:
             return choice(food_area)
 
@@ -128,9 +128,9 @@ class World(object):
 
     def update(self, delta):
         if not self.game_over:
-            self._tick_time += delta
-            while self._tick_time > self.config.tick:
-                self._tick_time -= self.config.tick
+            self.tick_time += delta
+            while self.tick_time > self.config.tick:
+                self.tick_time -= self.config.tick
                 self.update_world(delta)
 
     def update_world(self, delta):

@@ -1,4 +1,3 @@
-import time
 import curses
 import unittest
 
@@ -8,27 +7,11 @@ class TestWindowLayout(unittest.TestCase):
     def test_window(self):
         error_code = 0
         try:
-            stdscr = self._test_window_setup_curses()
-            self._test_window_run(stdscr)
+            curses.wrapper(self._test_window_run)
         except:
             error_code = 1
-        finally:
-            if "stdscr" in locals():
-                self._test_window_dispose_curses(stdscr)
 
         self.assertEqual(error_code, 0)
-
-    def _test_window_setup_curses(self):
-        stdscr = curses.initscr()
-        curses.noecho()
-        curses.cbreak()
-        stdscr.keypad(True)
-        try:
-            curses.start_color()
-        except:
-            pass
-
-        return stdscr
 
     def _test_window_run(self, stdscr):
         curses.use_default_colors()
@@ -61,12 +44,6 @@ class TestWindowLayout(unittest.TestCase):
             stdscr.noutrefresh()
             nw.noutrefresh()
             curses.doupdate()
-
-    def _test_window_dispose_curses(self, stdscr):
-        stdscr.keypad(False)
-        curses.echo()
-        curses.nocbreak()
-        curses.endwin()
 
 if __name__ == "__main__":
     unittest.main()
