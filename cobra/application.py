@@ -58,14 +58,14 @@ class Game(Application):
 
     def update(self):
         delay(self.framerate)
-        delta = self.calculate_delta()
-        self.screen.update(delta)
+        delta_time = self.calculate_delta_time()
+        self.screen.update(delta_time)
 
-    def calculate_delta(self):
+    def calculate_delta_time(self):
         ticks = time.time()
-        delta = ticks - self.last_ticks
+        delta_time = ticks - self.last_ticks
         self.last_ticks = ticks
-        return delta
+        return delta_time
 
 
 class Cobra(Game):
@@ -95,4 +95,3 @@ class Cobra(Game):
 
     def create_screen(self):
         self.screen = MenuScreen(self)
-
