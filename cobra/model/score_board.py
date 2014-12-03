@@ -31,15 +31,15 @@ class ScoreBoard(object):
 
     def load(self):
         json_object = {}
-        with open("data/scores.json") as f:
-            json_object = json.load(f)
+        with open("data/scores.json") as score_file:
+            json_object = json.load(score_file)
 
         return json_object
 
     def save(self):
         if self.changed:
-            with open("data/scores.json", "w") as f:
-                json.dump(self.scores, f)
+            with open("data/scores.json", "w") as score_file:
+                json.dump(self.scores, score_file)
         else:
             logger.info("No changes to save!")
 
