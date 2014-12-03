@@ -53,7 +53,7 @@ class TestWindowLayout(unittest.TestCase):
             elif k == ord('k'):
                 y -= 1
 
-            nw.clear()
+            nw.erase()
             nw.border()
             stdscr.addstr(0, 20, "{:02} {:02}".format(x, y))
             nw.addch(y+1, x+1, '@')

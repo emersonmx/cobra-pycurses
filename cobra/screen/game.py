@@ -3,9 +3,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 from cobra.gamepad import GamePad
-from cobra.screen import CursesScreen
-from cobra.model import World, WorldConfig, Snake
-from cobra.model import WorldListener, SnakeListener
+from cobra.screen.curses import CursesScreen
+from cobra.model.world import World, WorldConfig, WorldListener
+from cobra.model.snake import Snake, SnakeListener
 
 
 class GameScreen(CursesScreen, SnakeListener, WorldListener):
@@ -71,7 +71,7 @@ class GameScreen(CursesScreen, SnakeListener, WorldListener):
         self.gamepad.process_input()
 
     def render(self):
-        self.stdscr.clear()
+        self.stdscr.erase()
         self.render_screen()
         self.update_screen()
 

@@ -1,7 +1,7 @@
 import curses
 
 from cobra.screen.menu import MenuScreen
-from cobra.screen import Screen as NoScreen
+from cobra.screen.base import Screen as NoScreen
 from cobra.gamepad import CursesGamePad
 from cobra.util import *
 

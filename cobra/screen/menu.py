@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from cobra.gamepad import GamePad
-from cobra.screen import CursesScreen
+from cobra.screen.curses import CursesScreen
 
 
 class MenuScreen(CursesScreen):
@@ -77,7 +77,7 @@ class MenuScreen(CursesScreen):
         self.render()
 
     def render(self):
-        self.stdscr.clear()
+        self.stdscr.erase()
         self.render_logo()
         self.render_menu()
         self.stdscr.refresh()

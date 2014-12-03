@@ -1,8 +1,8 @@
 import curses
 
 from cobra.gamepad import GamePad
-from cobra.screen import CursesScreen
-from cobra.model import WorldConfig
+from cobra.screen.curses import CursesScreen
+from cobra.model.world import WorldConfig
 
 
 class DifficultySelectorScreen(CursesScreen):
@@ -88,7 +88,7 @@ class DifficultySelectorScreen(CursesScreen):
         self.render()
 
     def render(self):
-        self.stdscr.clear()
+        self.stdscr.erase()
         self.menu_screen.render_logo()
         self.render_difficulty_options()
         self.stdscr.refresh()

@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 from cobra.gamepad import GamePad
-from cobra.screen import CursesScreen
+from cobra.screen.curses import CursesScreen
 
 
 class GamePauseScreen(CursesScreen):
@@ -62,13 +62,13 @@ class GamePauseScreen(CursesScreen):
     def update(self, delta):
         self.gamepad.process_input()
 
-        self.stdscr.clear()
+        self.stdscr.erase()
         self.game_screen.render_screen()
         self.render_pause_window()
         curses.doupdate()
 
     def render_pause_window(self):
-        self.pause_window.clear()
+        self.pause_window.erase()
         self.pause_window.border()
         height, width = self.pause_window.getmaxyx()
         for i, option in enumerate(self.options):

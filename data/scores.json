@@ -1,0 +1,24 @@
+{
+    "easy": [
+        ["Norman", 100], ["Bruna", 200], ["Tamekia", 300],
+        ["Verline", 400], ["Vincenta", 500], ["Ivy", 600],
+        ["Trish", 700], ["Zackary", 800], ["Caren", 900],
+        ["Mafalda", 1000]
+    ],
+    "normal": [
+        ["Keenan", 100], ["Viviana", 200], ["Zula", 300],
+        ["Mildred", 400], ["Toni", 500], ["Roxann", 600],
+        ["Milan", 700], ["Joan", 800], ["Lucien", 900],
+        ["Ethan", 1000]
+    ],
+    "hard": [
+        ["Cedrick", 100], ["Maple", 200], ["Randy", 300], ["Toya", 400],
+        ["Desmond", 500], ["Myron", 600], ["Bess", 700],
+        ["Gustavo", 800], ["Hoa", 900], ["Emmett", 1000]
+    ],
+    "very_hard": [
+        ["Daron", 100], ["Donya", 200], ["Leonarda", 300], ["Ted", 400],
+        ["Eugenie", 500], ["Randy", 600], ["Michele", 700],
+        ["Akilah", 800], ["Trudi", 900], ["Necole", 1000]
+    ]
+}

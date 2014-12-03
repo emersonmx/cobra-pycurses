@@ -1,7 +1,7 @@
 import curses
 
 from cobra.gamepad import GamePad
-from cobra.screen import CursesScreen
+from cobra.screen.curses import CursesScreen
 
 
 class WaitGameScreen(CursesScreen):
@@ -42,7 +42,7 @@ class WaitGameScreen(CursesScreen):
     def update(self, delta):
         self.gamepad.process_input()
 
-        self.stdscr.clear()
+        self.stdscr.erase()
         self.game_screen.render_screen()
         self.render_message_window()
         curses.doupdate()
@@ -51,7 +51,7 @@ class WaitGameScreen(CursesScreen):
         height, width = self.message_window.getmaxyx()
         x = int(width / 2 - len(self.message) / 2)
         y = int(height / 2)
-        self.message_window.clear()
+        self.message_window.erase()
         self.message_window.border()
         self.message_window.addstr(y, x, self.message)
         self.message_window.noutrefresh()
