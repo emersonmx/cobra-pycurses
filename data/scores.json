@@ -1,24 +1,24 @@
 {
     "easy": [
-        ["Norman", 58200], ["Bruna", 58600], ["Tamekia", 76800],
-        ["Verline", 86600], ["Vincenta", 89600], ["Ivy", 93100],
-        ["Trish", 104700], ["Zackary", 109600], ["Caren", 122200],
-        ["Mafalda", 147800]
+        ["Norman", 100], ["Bruna", 200], ["Tamekia", 300],
+        ["Verline", 400], ["Vincenta", 500], ["Ivy", 600],
+        ["Trish", 700], ["Zackary", 800], ["Caren", 900],
+        ["Mafalda", 1000]
     ],
     "normal": [
-        ["Keenan", 4300], ["Viviana", 22500], ["Zula", 40700],
-        ["Mildred", 52400], ["Toni", 103800], ["Roxann", 107200],
-        ["Milan", 117200], ["Joan", 132700], ["Lucien", 136200],
-        ["Ethan", 138900]
+        ["Keenan", 100], ["Viviana", 200], ["Zula", 300],
+        ["Mildred", 400], ["Toni", 500], ["Roxann", 600],
+        ["Milan", 700], ["Joan", 800], ["Lucien", 900],
+        ["Ethan", 1000]
     ],
     "hard": [
-        ["Cedrick", 10600], ["Maple", 21300], ["Randy", 25900], ["Toya", 39000],
-        ["Desmond", 47200], ["Myron", 61900], ["Bess", 123200],
-        ["Gustavo", 137000], ["Hoa", 142500], ["Emmett", 149100]
+        ["Cedrick", 100], ["Maple", 200], ["Randy", 300], ["Toya", 400],
+        ["Desmond", 500], ["Myron", 600], ["Bess", 700],
+        ["Gustavo", 800], ["Hoa", 900], ["Emmett", 1000]
     ],
     "very_hard": [
-        ["Daron", 6600], ["Donya", 49000], ["Leonarda", 62600], ["Ted", 65600],
-        ["Eugenie", 78200], ["Randy", 78400], ["Michele", 82300],
-        ["Akilah", 98900], ["Trudi", 129300], ["Necole", 135300]
+        ["Daron", 100], ["Donya", 200], ["Leonarda", 300], ["Ted", 400],
+        ["Eugenie", 500], ["Randy", 600], ["Michele", 700],
+        ["Akilah", 800], ["Trudi", 900], ["Necole", 1000]
     ]
 }
