@@ -1,9 +1,9 @@
-import time
 import curses
 
 from cobra.screen.menu import MenuScreen
 from cobra.screen import Screen as NoScreen
 from cobra.gamepad import CursesGamePad
+from cobra.util import *
 
 
 class Application(object):
@@ -36,16 +36,13 @@ class Application(object):
         return self.error_code
 
 
-class Cobra(Application):
+class Game(Application):
 
-    def __init__(self, stdscr):
+    def __init__(self):
         Application.__init__(self)
 
-        self.stdscr = stdscr
-        self.window_size = ()
-        self.gamepad = None
-
-        self.last_ticks = 0
+        self.last_ticks = time.time()
+        self.framerate = 1000 / 60.
 
         self._screen = NoScreen()
 
@@ -59,24 +56,31 @@ class Cobra(Application):
         self._screen = screen
         self._screen.show()
 
+    def update(self):
+        delay(self.framerate)
+        delta = self.calculate_delta()
+        self.screen.update(delta)
+
+    def calculate_delta(self):
+        ticks = time.time()
+        delta = ticks - self.last_ticks
+        self.last_ticks = ticks
+        return delta
+
+
+class Cobra(Game):
+
+    def __init__(self, stdscr):
+        Game.__init__(self)
+
+        self.stdscr = stdscr
+        self.window_size = ()
+        self.gamepad = None
+
     def create(self):
         self.setup_curses()
         self.create_gamepad()
         self.create_screen()
-        self.last_ticks = time.time()
-
-    def dispose(self):
-        self.screen.dispose()
-
-    def update(self):
-        self.screen.update(self.delta_time())
-
-    def delta_time(self):
-        ticks = time.time()
-        delta = ticks - self.last_ticks
-        self.last_ticks = ticks
-
-        return delta
 
     def setup_curses(self):
         curses.resizeterm(24, 80)
@@ -91,3 +95,4 @@ class Cobra(Application):
 
     def create_screen(self):
         self.screen = MenuScreen(self)
+

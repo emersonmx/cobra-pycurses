@@ -1,4 +1,4 @@
-import curses
+import time
 
-def sleep():
-    curses.napms(16)
+def delay(milliseconds):
+    time.sleep(milliseconds / 1000.)

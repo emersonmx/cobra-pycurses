@@ -3,7 +3,6 @@ import curses
 from cobra.gamepad import GamePad
 from cobra.screen import CursesScreen
 from cobra.model import WorldConfig
-from cobra.util import sleep
 
 
 class DifficultySelectorScreen(CursesScreen):
@@ -84,7 +83,6 @@ class DifficultySelectorScreen(CursesScreen):
         return world_config
 
     def update(self, delta):
-        sleep()
         self.gamepad.process_input()
 
         self.render()

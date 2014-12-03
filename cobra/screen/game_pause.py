@@ -4,7 +4,6 @@ logger = logging.getLogger(__name__)
 
 from cobra.gamepad import GamePad
 from cobra.screen import CursesScreen
-from cobra.util import sleep
 
 
 class GamePauseScreen(CursesScreen):
@@ -61,7 +60,6 @@ class GamePauseScreen(CursesScreen):
         self.gamepad.commands[GamePad.BACK] = back
 
     def update(self, delta):
-        sleep()
         self.gamepad.process_input()
 
         self.stdscr.clear()

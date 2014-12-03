@@ -2,7 +2,6 @@ import curses
 
 from cobra.gamepad import GamePad
 from cobra.screen import CursesScreen
-from cobra.util import sleep
 
 
 class WaitGameScreen(CursesScreen):
@@ -41,7 +40,6 @@ class WaitGameScreen(CursesScreen):
             self.gamepad.commands[command] = start_game
 
     def update(self, delta):
-        sleep()
         self.gamepad.process_input()
 
         self.stdscr.clear()

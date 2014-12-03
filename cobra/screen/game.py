@@ -6,7 +6,6 @@ from cobra.gamepad import GamePad
 from cobra.screen import CursesScreen
 from cobra.model import World, WorldConfig, Snake
 from cobra.model import WorldListener, SnakeListener
-from cobra.util import sleep
 
 
 class GameScreen(CursesScreen, SnakeListener, WorldListener):
@@ -63,8 +62,6 @@ class GameScreen(CursesScreen, SnakeListener, WorldListener):
         self.gamepad.commands[GamePad.BACK] = pause
 
     def update(self, delta):
-        sleep()
-
         self.process_input()
         self.world.update(delta)
 
