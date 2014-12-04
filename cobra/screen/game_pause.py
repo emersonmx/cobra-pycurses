@@ -59,9 +59,7 @@ class GamePauseScreen(CursesScreen):
         self.gamepad.commands[GamePad.ENTER] = enter
         self.gamepad.commands[GamePad.BACK] = back
 
-    def update(self, delta):
-        self.gamepad.process_input()
-
+    def render(self):
         self.stdscr.erase()
         self.game_screen.render_screen()
         self.render_pause_window()

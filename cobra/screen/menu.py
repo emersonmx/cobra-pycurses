@@ -71,11 +71,6 @@ class MenuScreen(CursesScreen):
         self.gamepad.commands[GamePad.ENTER] = enter
         self.gamepad.commands[GamePad.BACK] = back
 
-    def update(self, delta):
-        self.gamepad.process_input()
-
-        self.render()
-
     def render(self):
         self.stdscr.erase()
         self.render_logo()

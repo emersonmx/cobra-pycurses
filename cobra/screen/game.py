@@ -61,11 +61,8 @@ class GameScreen(CursesScreen, SnakeListener, WorldListener):
         self.gamepad.commands[GamePad.LEFT] = snake_left
         self.gamepad.commands[GamePad.BACK] = pause
 
-    def update(self, delta):
-        self.process_input()
+    def process_logic(self, delta):
         self.world.update(delta)
-
-        self.render()
 
     def process_input(self):
         self.gamepad.process_input()

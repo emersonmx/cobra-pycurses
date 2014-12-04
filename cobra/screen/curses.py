@@ -24,3 +24,17 @@ class CursesScreen(Screen):
 
     def setup_gamepad(self):
         pass
+
+    def update(self, delta):
+        self.process_input()
+        self.process_logic(delta)
+        self.render()
+
+    def process_input(self):
+        self.gamepad.process_input()
+
+    def process_logic(self, delta):
+        pass
+
+    def render(self):
+        pass

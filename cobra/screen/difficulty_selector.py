@@ -82,11 +82,6 @@ class DifficultySelectorScreen(CursesScreen):
         world_config = WorldConfig()
         return world_config
 
-    def update(self, delta):
-        self.gamepad.process_input()
-
-        self.render()
-
     def render(self):
         self.stdscr.erase()
         self.menu_screen.render_logo()

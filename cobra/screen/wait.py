@@ -39,9 +39,7 @@ class WaitGameScreen(CursesScreen):
         for command in commands:
             self.gamepad.commands[command] = start_game
 
-    def update(self, delta):
-        self.gamepad.process_input()
-
+    def render(self):
         self.stdscr.erase()
         self.game_screen.render_screen()
         self.render_message_window()
