@@ -17,7 +17,7 @@ class MenuScreen(CursesScreen):
         CursesScreen.__init__(self, application)
 
         self.logo = []
-        self.menu_options = ["Start", "How-To", "High Scores", "Quit"]
+        self.options = ["Start", "How-To", "High Scores", "Quit"]
         self.option = self.START_GAME
 
         self.create()
@@ -87,8 +87,8 @@ class MenuScreen(CursesScreen):
     def render_menu(self):
         height, width = self.window_size
         padding = 2
-        y = height - len(self.menu_options) - padding
-        for i, option in enumerate(self.menu_options):
+        y = height - len(self.options) - padding
+        for i, option in enumerate(self.options):
             attribute = curses.A_NORMAL
             if i == self.option:
                 attribute = curses.A_BOLD

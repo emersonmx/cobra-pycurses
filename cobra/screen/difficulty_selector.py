@@ -17,7 +17,7 @@ class DifficultySelectorScreen(CursesScreen):
 
         self.menu_screen = menu_screen
 
-        self.difficulty_options = ["Easy", "Normal", "Hard", "Very Hard"]
+        self.options = ["Easy", "Normal", "Hard", "Very Hard"]
         self.option = self.EASY
 
     def setup_gamepad(self):
@@ -91,8 +91,8 @@ class DifficultySelectorScreen(CursesScreen):
     def render_difficulty_options(self):
         height, width = self.window_size
         padding = 2
-        y = height - len(self.difficulty_options) - padding
-        for i, option in enumerate(self.difficulty_options):
+        y = height - len(self.options) - padding
+        for i, option in enumerate(self.options):
             attribute = curses.A_NORMAL
             if i == self.option:
                 attribute = curses.A_BOLD
