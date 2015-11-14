@@ -1,7 +1,7 @@
 Cobra
 =====
 
-O clássico jogo da cobrinha escrito em Python.
+O clássico jogo da cobrinha escrito em Python 3.
 
 Controles
 ---------
